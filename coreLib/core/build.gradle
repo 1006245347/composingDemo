@@ -1,0 +1,35 @@
+android {
+    compileSdk BuildManager.compileSdkVersion
+
+    defaultConfig {
+        minSdk BuildManager.minSdkVersion
+        targetSdk BuildManager.targetSdkVersion
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+import cn.hwj.buildplugin.* //import cn.hwj.buildplugin.*  注意插件会报无引用
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    api DepManager.core
+    api DepManager.appcompat
+    api DepManager.material
+    api DepManager.constraintlayout
+}

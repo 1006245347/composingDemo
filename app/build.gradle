@@ -1,0 +1,42 @@
+import cn.hwj.buildplugin.* //import cn.hwj.buildplugin.*  注意插件会报无引用
+android {
+    compileSdk BuildManager.compileSdkVersion
+
+    defaultConfig {
+        applicationId "cn.hwj.composing"
+        minSdk BuildManager.minSdkVersion
+        targetSdk BuildManager.targetSdkVersion
+        versionCode BuildManager.versionCode
+        versionName BuildManager.versionName
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':core')
+    if (DepManager.isDebug) {
+        implementation project(':route')
+    } else {
+        implementation project(':login')
+        implementation project(':search')
+    }
+//    api Funtion.arouterCore
+//    kapt Funtion.arouterNote //用Arouter全部都要引用
+}

@@ -1,0 +1,59 @@
+apply plugin: 'org.jetbrains.kotlin.android'
+import cn.hwj.buildplugin.* //import cn.hwj.buildplugin.*  注意没有插件会报错DepManager无法识别
+android {
+    compileSdk BuildManager.compileSdkVersion
+
+    defaultConfig {
+//        applicationId "cn.hwj.login" //当单独打包也不需要配置？
+        minSdk BuildManager.minSdkVersion
+        targetSdk BuildManager.targetSdkVersion
+        versionCode BuildManager.versionCode
+        versionName BuildManager.versionName
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    sourceSets {
+        main{
+            if (DepManager.isDebug){
+                manifest.srcFile '../login/src/main/module/AndroidManifest.xml'
+            }else{
+                manifest.srcFile '../login/src/main/AndroidManifest.xml'
+                //集成开发模式下排除debug文件夹的所有文件
+                java {
+                    exclude 'debug/**'
+                }
+                kotlin {
+                    exclude 'debug/**'
+                }
+            }
+        }
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':core')
+    implementation project(':route')
+    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'com.google.android.material:material:1.7.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
+}

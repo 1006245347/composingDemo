@@ -1,0 +1,36 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name = "composingDemo"
+include ':app'
+//Project directory 'E:\jason_android\work_space\ComposingBuild2\composingDemo\buildplugin' is not part of the build defined by settings file
+includeBuild("buildplugin")
+
+//includeBuild("../buildplugin")
+
+//改造成组件化
+include ':core'     //功能库-网络、线程、状态、主题、base类
+include ':lite'     //功能库-轻量化部分常用但非某些组件要，可不依赖
+include ':route'    //只放路由地址
+
+//对组件设置相对路径
+project(':core').projectDir = new File('coreLib/core')
+project(':lite').projectDir = new File('coreLib/lite')
+project(':route').projectDir = new File('coreLib/route')
+
+//模块化-业务可以单独打包
+include ':login' //模块 登录
+include ':search'//模块 搜索
+

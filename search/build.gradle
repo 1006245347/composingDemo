@@ -1,0 +1,56 @@
+import cn.hwj.buildplugin.*
+
+android {
+    compileSdk BuildManager.compileSdkVersion
+
+    defaultConfig {
+//        applicationId "cn.hwj.search"
+        minSdk BuildManager.minSdkVersion
+        targetSdk BuildManager.targetSdkVersion
+        versionCode BuildManager.versionCode
+        versionName BuildManager.versionName
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    sourceSets {
+        main{
+            if (DepManager.isDebug){
+                manifest.srcFile '../search/src/main/module/AndroidManifest.xml'
+            }else{
+                manifest.srcFile '../search/src/main/AndroidManifest.xml'
+                //集成开发模式下排除debug文件夹的所有文件
+                java { //好像没必要
+                    exclude 'debug/**'
+                }
+                kotlin {
+                    exclude 'debug/**'
+                }
+            }
+        }
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation project(':core')
+    implementation project(':lite')
+}

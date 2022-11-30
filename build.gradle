@@ -1,0 +1,49 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+//buildscript {
+//    dependencies {
+//        //当需要增加第三方依赖
+////        classpath 'com.yanzhenjie.andserver:plugin:2.1.10'
+//          classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
+//          classpath 'com.android.tools.build:gradle:7.1.2'
+//    }
+//}
+
+plugins {
+    id 'com.android.application' version '7.1.2' apply false
+    id 'com.android.library' version '7.1.2' apply false
+    id 'org.jetbrains.kotlin.android' version '1.6.10' apply false
+
+    //补插件？
+    id "cn.hwj.buildplugin" apply false
+}
+
+subprojects { subproject ->
+    apply plugin: 'cn.hwj.buildplugin' //旧版写法
+//    plugins { //这种写法报错
+//        id "cn.hwj.buildplugin"
+//    }
+
+    if (subproject.name == "app") {
+        apply plugin: "com.android.application"
+        apply plugin: "org.jetbrains.kotlin.android"
+        apply plugin: "kotlin-kapt"
+    } else if (subproject.name == "login"
+            || subproject.name == "search") {
+        //这里鉴别各业务模块，方便单独打包运行  模块化
+        if (DepManager.isDebug) {
+            apply plugin: "com.android.application"
+        } else {
+            apply plugin: "com.android.library"
+        }
+        apply plugin: "org.jetbrains.kotlin.android"
+        apply plugin: "kotlin-kapt"
+    } else { //这里放所有的Library 组件化
+        apply plugin: "com.android.library"
+        apply plugin: "org.jetbrains.kotlin.android"
+        apply plugin: "kotlin-kapt"
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
