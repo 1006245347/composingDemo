@@ -1,5 +1,5 @@
-apply plugin: 'org.jetbrains.kotlin.android'
 import cn.hwj.buildplugin.* //import cn.hwj.buildplugin.*  注意没有插件会报错DepManager无法识别
+
 android {
     compileSdk BuildManager.compileSdkVersion
 
@@ -12,7 +12,14 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
+    if (DepManager.isDebug) {
+        //指定打包后应用名称
+        android.applicationVariants.all { variant ->
+            variant.outputs.all {
+                outputFileName = "login_${buildType.name}_${defaultConfig.versionName}_${defaultConfig.versionCode}.apk"
+            }
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -52,8 +59,4 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':core')
     implementation project(':route')
-    implementation 'androidx.appcompat:appcompat:1.5.1'
-    implementation 'com.google.android.material:material:1.7.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-
 }

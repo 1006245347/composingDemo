@@ -8,7 +8,15 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
-
+    // 签名设置
+    signingConfigs {
+        myConfig {
+            storeFile file("gree_pad_app.jks")
+            storePassword "123456"
+            keyAlias "gree"
+            keyPassword "123456"
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -32,4 +40,6 @@ dependencies {
     api DepManager.appcompat
     api DepManager.material
     api DepManager.constraintlayout
+
+    api DepManager.routerCore
 }

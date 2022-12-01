@@ -14,6 +14,7 @@ object DepManager {
     private const val appcompat_version = "1.5.1"
     private const val material_version = "1.6.1"
     private const val constraintlayout_version = "2.1.4"
+    private const val router_version="2.3.0"
 
     const val core = "androidx.core:core-ktx:$core_ktx_version"
 
@@ -29,6 +30,10 @@ object DepManager {
     val eventbusNote = "org.greenrobot:eventbus-annotation-processor:3.2.0"
 
     val runtime = "androidx.work:work-runtime-ktx:2.7.1"
+
+    val routerCore =
+        "io.github.didi:drouter-api:${router_version}" //https://github.com/didi/DRouter/wiki
+
 }
 
 object TestManager {
