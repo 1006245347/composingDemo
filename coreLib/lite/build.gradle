@@ -32,5 +32,5 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     //组件化多个apk,能安装无法打开，Android app won't build -- The minCompileSdk (31) specified in a dependency's androidx.work:work-runtime:2.7.0-beta01
-    api DepManager.runtime // worker
+    api DepManager.runtime // worker的低版本不兼容Android32
 }

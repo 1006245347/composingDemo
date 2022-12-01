@@ -4,7 +4,9 @@
  */
 object DepManager {
 
-    val isDebug=false //true=各模块单独运行，false=app集成所有模块
+    //true=各模块单独运行，false=app集成所有模块
+    //手动调整集成模式，需要修改isDebug的值，还要Invalidate Caches全√才能变换
+    val isDebug=true
     /**
      * 依赖版本
      */

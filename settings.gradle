@@ -15,6 +15,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "composingDemo"
 include ':app'
+//插件的位置放在项目根目录下Clean Project会报以下错，没关系，app直接run就行，/build文件夹依然会被删除
 //Project directory 'E:\jason_android\work_space\ComposingBuild2\composingDemo\buildplugin' is not part of the build defined by settings file
 includeBuild("buildplugin")
 
