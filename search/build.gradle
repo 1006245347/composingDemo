@@ -1,3 +1,4 @@
+apply plugin: 'org.jetbrains.kotlin.android'
 android {
     compileSdk BuildManager.compileSdkVersion
 
@@ -8,7 +9,6 @@ android {
         versionName BuildManager.versionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        //每个module 都配一次有点麻烦，期望写在lib中传入JPUSH_PKGNAME
         manifestPlaceholders =[
             JPUSH_PKGNAME : "cn.hwj.search",
             JPUSH_APPKEY : "73882da499a7883a9e28ff67", //JPush 上注册的包名对应的 Appkey.

@@ -9,12 +9,12 @@ object RoutePath {
     //登录模块
     const val LOGIN_ACTIVITY_WELCOME = "/login/welcome"
     const val LOGIN_ACTIVITY_LOGIN = "/login/login"
-    const val LOGIN_ACTIVITY_TAG="/login/tab"
-    const val LOGIN_FRAGMENT_FIRST="/fragment/first/1"
+    const val LOGIN_ACTIVITY_TAG = "/login/tab"
+    const val LOGIN_FRAGMENT_FIRST = "/fragment/first/1"
 
 
     //搜索模块
     const val SEARCH_ACTIVITY_INPUT = "/search/input"
-
+    const val SEARCH_ACTIVITY_LIST = "search/list"
 
 }

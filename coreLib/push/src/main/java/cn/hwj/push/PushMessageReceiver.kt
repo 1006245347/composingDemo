@@ -12,15 +12,16 @@ import org.json.JSONObject
 
 /**
  * @author by jason-何伟杰，2022/12/2
- * des:收到自定义消息
+ * des:收到自定义消息的处理
  */
 class PushMessageReceiver : JPushMessageReceiver() {
 
-    /*统一处理解析消息体*/
+    /*统一处理解析消息体,然后通过广播发送出去*/
     private fun parsePushEvent(context: Context, customMessage: CustomMessage) {
         try {
             Log.v("TAG", "CTX=${context} $customMessage")
 //            val jsonObject = JSONObject(customMessage.message)
+            PushHelper.instance?.callbackReceive("$customMessage")
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -68,25 +69,28 @@ class PushMessageReceiver : JPushMessageReceiver() {
     }
 
     override fun onTagOperatorResult(context: Context?, jPushMessage: JPushMessage) {
-        TagAliasOperatorHelper.getInstance().onTagOperatorResult(context, jPushMessage)
+        PushHelper.instance?.onTagOperatorResult(context, jPushMessage)
         super.onTagOperatorResult(context, jPushMessage)
     }
 
-    override fun onCheckTagOperatorResult(context: Context?, jPushMessage: JPushMessage?) {
-        TagAliasOperatorHelper.getInstance().onCheckTagOperatorResult(context, jPushMessage)
+    override fun onCheckTagOperatorResult(context: Context?, jPushMessage: JPushMessage) {
+        PushHelper.instance?.onCheckTagOperatorResult(context, jPushMessage)
         super.onCheckTagOperatorResult(context, jPushMessage)
     }
 
-    override fun onMobileNumberOperatorResult(context: Context?, jPushMessage: JPushMessage?) {
-        TagAliasOperatorHelper.getInstance().onMobileNumberOperatorResult(context, jPushMessage)
+    override fun onMobileNumberOperatorResult(context: Context?, jPushMessage: JPushMessage) {
+        PushHelper.instance?.onMobileNumberOperatorResult(context, jPushMessage)
         super.onMobileNumberOperatorResult(context, jPushMessage)
+    }
+
+    override fun onAliasOperatorResult(context: Context?, jPushMessage: JPushMessage) {
+        PushHelper.instance?.onAliasOperatorResult(context,jPushMessage)
+        super.onAliasOperatorResult(context, jPushMessage)
     }
 
     override fun onMultiActionClicked(context: Context?, intent: Intent) {
         var nActionExtra: String? =
             intent.getExtras()?.getString(JPushInterface.EXTRA_NOTIFICATION_ACTION_EXTRA)
-
-        //开发者根据不同 Action 携带的 extra 字段来分配不同的动作。
 
         //开发者根据不同 Action 携带的 extra 字段来分配不同的动作。
         if (nActionExtra == null) {

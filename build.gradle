@@ -43,8 +43,6 @@ subprojects { subproject ->
         drouter {
             debug = DepManager.isDebug //Logcat中抓取 DRouterCore 关键字
         }
-        //推送的配置
-
     } else { //这里放所有的Library 组件化
         apply plugin: "com.android.library"
         apply plugin: "org.jetbrains.kotlin.android"
