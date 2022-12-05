@@ -6,34 +6,55 @@ import android.util.Log
  * @author by jason-何伟杰，2022/11/25
  * des:日志打印
  */
-var openLog = true
+internal var openLog = true
 
 const val TAG = "TAG"
 
-internal fun printI(message: String = "", key: String = TAG) {
-    if (openLog) {
+fun setLogEnable(enable: Boolean = true) {
+    openLog = enable
+}
+
+fun printI(message: String = "", key: String = TAG) {
+    if (openLog && !isEmpty(message)) {
         Log.i(key, message)
     }
 }
 
-internal fun printV(message: String, key: String = TAG) {
-    if (openLog)
-        Log.v(key, message)
+fun printV(message: String?, key: String = TAG) {
+    if (openLog && !isEmpty(message))
+        Log.v(key, message!!)
 }
 
-internal fun printD(message: String, key: String = TAG) {
-    if (openLog)
+fun printD(message: String, key: String = TAG) {
+    if (openLog && !isEmpty(message))
         Log.d(key, message)
 }
 
-internal fun printW(message: String, key: String = TAG) {
-    if (openLog) {
+fun printW(message: String, key: String = TAG) {
+    if (openLog && !isEmpty(message)) {
         Log.w(key, message)
     }
 }
 
-internal fun printE(message: String, key: String = TAG) {
-    if (openLog) {
+fun printE(message: String, key: String = TAG) {
+    if (openLog && !isEmpty(message)) {
         Log.e(key, message)
     }
+}
+
+//严格判空
+fun isEmpty(s: String?): Boolean {
+    if (null == s) {
+        println("LogUtils_txt is null>>>")
+        return true
+    }
+    if (s.isEmpty()) {
+        println("LogUtils_txt is null>>>")
+        return true
+    }
+    if (s.trim { it <= ' ' }.isEmpty()) {
+        println("LogUtils_txt is ' '>>>")
+        return true
+    }
+    return false
 }

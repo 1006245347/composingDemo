@@ -2,20 +2,24 @@ android {
     compileSdk BuildManager.compileSdkVersion
 
     defaultConfig {
-//        applicationId "cn.hwj.search"
         minSdk BuildManager.minSdkVersion
         targetSdk BuildManager.targetSdkVersion
         versionCode BuildManager.versionCode
         versionName BuildManager.versionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        //每个module 都配一次有点麻烦，期望写在lib中传入JPUSH_PKGNAME
+        manifestPlaceholders =[
+            JPUSH_PKGNAME : "cn.hwj.search",
+            JPUSH_APPKEY : "73882da499a7883a9e28ff67", //JPush 上注册的包名对应的 Appkey.
+            JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
+        ]
     }
     if (DepManager.isDebug) {
         //指定打包后应用名称
         android.applicationVariants.all { variant ->
             variant.outputs.all {
                 outputFileName = "search_${buildType.name}_${defaultConfig.versionName}_${defaultConfig.versionCode}.apk"
-
             }
         }
     }
@@ -59,4 +63,5 @@ dependencies {
     implementation project(':core')
     implementation project(':lite')
     implementation project(':route')
+    implementation project(':push')
 }

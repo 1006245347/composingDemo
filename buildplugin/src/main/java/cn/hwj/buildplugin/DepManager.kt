@@ -14,7 +14,7 @@ object DepManager {
     private const val appcompat_version = "1.5.1"
     private const val material_version = "1.6.1"
     private const val constraintlayout_version = "2.1.4"
-    private const val router_version="2.3.0"
+    private const val router_version="2.4.3"
 
     const val core = "androidx.core:core-ktx:$core_ktx_version"
 
@@ -33,6 +33,8 @@ object DepManager {
 
     val routerCore =
         "io.github.didi:drouter-api:${router_version}" //https://github.com/didi/DRouter/wiki
+
+    val permissionCore= "com.guolindev.permissionx:permissionx:1.7.1"  //已适配Android13
 
 }
 

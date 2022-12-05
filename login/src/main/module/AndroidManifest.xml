@@ -18,14 +18,17 @@
         android:theme="@style/Theme.ComposingDemo"
         tools:ignore="HardcodedDebugMode">
         <activity
+            android:name=".TabActivity"
+            android:exported="false" />
+        <activity
             android:name=".WelcomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".LoginActivity"
             android:exported="false" />

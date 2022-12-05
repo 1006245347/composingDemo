@@ -1,6 +1,7 @@
 package cn.hwj.core.global
 
 import android.app.Activity
+import android.app.Application
 import android.content.Context
 import android.os.Bundle
 
@@ -100,6 +101,15 @@ interface IModuleInit {
 }
 
 abstract class BaseModuleInit : IModuleInit {
+
+    fun getModuleApplication(): Application {
+        return CoreApplicationProvider.appContext
+    }
+
+    fun getModuleContext(): Context {
+        return CoreApplicationProvider.appContext.applicationContext
+    }
+
     /**
      * 模块初始化优先级 越高初始化越快
      * Module中设置优先级越小越优先初始化

@@ -3,8 +3,21 @@
     package="cn.hwj.login">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <!--Android 13细化媒体权限-->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+
+    <!-- Required to maintain app compatibility. -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+
+    <!--应用通知-->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
+    <!--近场wifi-->
+    <uses-permission android:name="android.permission.NEARBY_WIFI_DEVICES"/>
 
     <application android:theme="@style/Theme.ComposingDemo">
         <activity
@@ -19,6 +32,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

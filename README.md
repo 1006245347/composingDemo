@@ -18,20 +18,20 @@
 |测试环境|greePaddev|http://134. |
 |质控部测试|greePadque|http: |
 
-## 路由组件v1.0[](https://github.com/didi/DRouter/wiki)
+## 路由组件 滴滴[](https://github.com/didi/DRouter/wiki)
 
 架构说明：...
 
 ## 配置
 JDK 11 
 android 版本 12 File->Settings->Android API 32 SDK 32.0.0 
-compileSdkVersion = 32
-buildToolsVersion = "32.0.0"
-targetSdkVersion = 32
+compileSdkVersion = 33
+buildToolsVersion = "33.0.0"
+targetSdkVersion = 33
 
 Kotlin版本 kotlin = "1.6.10"
 
-##build.gradle 文件
+## build.gradle 文件
 { 
    ... 
    dependencies { 

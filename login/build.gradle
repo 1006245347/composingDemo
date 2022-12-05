@@ -1,3 +1,4 @@
+apply plugin: 'org.jetbrains.kotlin.android'
 import cn.hwj.buildplugin.* //import cn.hwj.buildplugin.*  注意没有插件会报错DepManager无法识别
 
 android {

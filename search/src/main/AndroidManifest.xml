@@ -10,7 +10,7 @@
         android:theme="@style/Theme.ComposingDemo">
         <activity
             android:name=".SearchActivity"
-            android:exported="false" />
+            android:exported="true" />
     </application>
 
 </manifest>

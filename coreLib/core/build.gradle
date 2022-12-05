@@ -42,4 +42,5 @@ dependencies {
     api DepManager.constraintlayout
 
     api DepManager.routerCore
+    api DepManager.permissionCore
 }

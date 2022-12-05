@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.text.TextUtils
 import cn.hwj.core.CoreUtils.getCurProcessName
+import com.didi.drouter.api.DRouter
 import java.io.File
 
 open class CoreApplicationProvider : Application() {
@@ -24,11 +25,11 @@ open class CoreApplicationProvider : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        appContext = this
-        ModuleInitDelegate.reorder()
-        ModuleInitDelegate.onCreate()
-        if (TextUtils.equals(getCurProcessName(appContext), packageName)) {
+        if (TextUtils.equals(getCurProcessName(this), packageName)) {
+            appContext = this
             initApp()//确保只在主进程初始化
+            ModuleInitDelegate.reorder()
+            ModuleInitDelegate.onCreate()
         }
         printV("Application执行次数》》$packageName")
     }
@@ -36,6 +37,7 @@ open class CoreApplicationProvider : Application() {
     /*适合基础库的初始化，会回调到所有模块*/
     open fun initApp() {
 //        ???多个module下，如何都实现监听Activity生命并操作却不重复，？？每个module用接口不会吧
+        //暂时在ModuleInitDelegate处理，后续再看
 //        registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacksImpl {
 //            override fun onActivityCreated(activity: Activity, p1: Bundle?) {
 //                super.onActivityCreated(activity, p1)
@@ -47,6 +49,8 @@ open class CoreApplicationProvider : Application() {
 //                printV("custom_destroy>>$activity")
 //            }
 //        })
+
+        DRouter.init(this) //初始化路由表
     }
 
     override fun attachBaseContext(base: Context) {
@@ -68,4 +72,6 @@ open class CoreApplicationProvider : Application() {
         super.onTerminate()
         ModuleInitDelegate.onTerminate()
     }
+
+
 }

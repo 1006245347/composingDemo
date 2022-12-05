@@ -4,7 +4,10 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import cn.hwj.core.CoreUtils
-
+/**
+ * @author by jason-何伟杰，2022/12/2
+ * des: 附加功能-在推送通知栏直接打开本页面
+ */
 class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
