@@ -53,11 +53,11 @@ class LoginActivity : AppCompatActivity() {
 
     private fun askPermission() {
         val requestList = ArrayList<String>()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            requestList.add(Manifest.permission.READ_MEDIA_IMAGES)
-            requestList.add(Manifest.permission.READ_MEDIA_AUDIO)
-            requestList.add(Manifest.permission.READ_MEDIA_VIDEO)
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//            requestList.add(Manifest.permission.READ_MEDIA_IMAGES)
+//            requestList.add(Manifest.permission.READ_MEDIA_AUDIO)
+//            requestList.add(Manifest.permission.READ_MEDIA_VIDEO)
+//        } //Android 13 特有权限，由于编译器在sdk33无法自动补全xml代码，后续再升级As
         PermissionX.init(this)
             .permissions(requestList)
             .onExplainRequestReason { scope, deniedList ->
@@ -76,7 +76,7 @@ class LoginActivity : AppCompatActivity() {
     // Manifest.permission.POST_NOTIFICATIONS在Android 13以下系统可能会导致编译不过。
     private fun askNotification() {
         PermissionX.init(this)
-            .permissions(PermissionX.permission.POST_NOTIFICATIONS,Manifest.permission.NEARBY_WIFI_DEVICES)
+            .permissions(PermissionX.permission.POST_NOTIFICATIONS)//,Manifest.permission.NEARBY_WIFI_DEVICES
             .onExplainRequestReason { scope, deniedList ->
                 val msg = "避免遗漏重要通知，同意权限："
                 scope.showRequestReasonDialog(deniedList, msg, "yes", "no")

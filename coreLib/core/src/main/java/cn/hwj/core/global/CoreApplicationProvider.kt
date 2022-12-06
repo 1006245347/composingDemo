@@ -2,6 +2,8 @@ package cn.hwj.core.global
 
 import android.app.Application
 import android.content.Context
+import android.support.multidex.MultiDex
+import android.support.multidex.MultiDexApplication
 import android.text.TextUtils
 import cn.hwj.core.CoreUtils.getCurProcessName
 import com.didi.drouter.api.DRouter
@@ -55,6 +57,8 @@ open class CoreApplicationProvider : Application() {
 
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(base)
+        MultiDex.install(base)
+        printV("attachBaseContext执行次数》》$packageName")
         ModuleInitDelegate.attachBaseContext(base)
     }
 

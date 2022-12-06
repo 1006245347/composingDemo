@@ -29,6 +29,4 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    api DepManager.eventbusCore
-    kapt DepManager.eventbusNote
 }

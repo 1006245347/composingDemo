@@ -1,3 +1,5 @@
+import cn.hwj.buildplugin.* //import cn.hwj.buildplugin.*  注意插件会报无引用
+
 android {
     compileSdk BuildManager.compileSdkVersion
 
@@ -13,15 +15,7 @@ android {
             abiFilters 'armeabi','armeabi-v7a' //, 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
         }
     }
-    // 签名设置
-    signingConfigs {
-        myConfig {
-            storeFile file("gree_pad_app.jks")
-            storePassword "123456"
-            keyAlias "gree"
-            keyPassword "123456"
-        }
-    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -35,21 +29,19 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+//    sourceSets {
+//        main {
+//            jniLibs.srcDirs = ['libs']
+//            res.srcDirs = ['src/main/res']
+//        }
+//    }
 }
-import cn.hwj.buildplugin.* //import cn.hwj.buildplugin.*  注意插件会报无引用
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    api DepManager.core
-    api DepManager.appcompat
-    api DepManager.material
-    api DepManager.constraintlayout
-
-    api DepManager.routerCore
-    api DepManager.permissionCore
-
+    //集成x5 webView内核
+    api files('libs/tbs_sdk_thirdapp_v4.3.0.326_44226_sharewithdownloadwithfile_withoutGame_obfs_20220825_155943.jar')
     //崩溃上报
     api files('libs/bugly-core-4.1.9.aar')
-
-    api "com.android.support:multidex:1.0.3" // 多dex配置
 }

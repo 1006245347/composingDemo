@@ -12,6 +12,7 @@ import cn.hwj.push.PushListener
 import cn.hwj.route.RoutePath
 import com.didi.drouter.annotation.Router
 import com.didi.drouter.api.DRouter
+import org.json.JSONObject
 
 /**
  * @author by jason-何伟杰，2022/12/2
@@ -51,7 +52,12 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun clickEvent() {
-        DRouter.build(RoutePath.SEARCH_ACTIVITY_LIST)
+//        printV("curProcess=${CoreUtils.getCurProcessName(this)}")
+//        CoreUtils.testCrashUpload()
+//        DRouter.build(RoutePath.SEARCH_ACTIVITY_LIST)
+//            .start()
+        DRouter.build(RoutePath.SEARCH_ACTIVITY_WEB)
+            .putExtra("url","https://www.baidu.com")
             .start()
     }
 
@@ -60,7 +66,19 @@ class SearchActivity : AppCompatActivity() {
         val stringBuilder = StringBuilder()
             .append(txt)
             .append(news)
-        tvInfo.setText(stringBuilder.toString())
+        tvInfo.text = stringBuilder.toString()
         return stringBuilder.toString()
+    }
+
+    private fun test(){
+        val s=getString(R.string.app_name_pad)
+        printV("s=$s") //竟然自动把双引号干掉了
+        val js=JSONObject(s)
+        printV("s=${js.getJSONObject("_default")}")
+        val jv = js.getJSONObject("_default")
+        jv?.let {
+            printV("id=${ it.optString("clubId")}")
+
+        }
     }
 }

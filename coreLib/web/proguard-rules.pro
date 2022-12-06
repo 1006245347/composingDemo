@@ -20,5 +20,16 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+-dontwarn dalvik.**
+-dontwarn com.tencent.smtt.**
+
+-keep class com.tencent.smtt.** {
+    *;
+}
+
+-keep class com.tencent.tbs.** {
+    *;
+}
+
 -dontwarn com.tencent.bugly.**
 -keep public class com.tencent.bugly.**{*;}

@@ -15,6 +15,8 @@ object RoutePath {
 
     //搜索模块
     const val SEARCH_ACTIVITY_INPUT = "/search/input"
-    const val SEARCH_ACTIVITY_LIST = "search/list"
+    const val SEARCH_ACTIVITY_LIST = "/search/list"
+    const val SEARCH_ACTIVITY_WEB="/search/web"
+    const val SEARCH_ACTIVITY_FILE="/search/file"
 
 }

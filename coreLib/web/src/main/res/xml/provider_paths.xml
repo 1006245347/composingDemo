@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- /storage/emulated/0/Download/${applicationId}/.beta/apk-->
+    <external-path
+        name="pad_external_path"
+        path="Download/" />
+    <!--/storage/emulated/0/Android/data/${applicationId}/files/apk/-->
+    <external-path
+        name="pad_external_files_path"
+        path="Android/data/" />
+    <external-files-path
+        name="video_file"
+        path="gree_download_dir" />
+
+    <external-files-path
+        name="cache_file"
+        path="gree_pad_dir" />
+    <external-path
+        name="files_root"
+        path="Android/data/com.lyentech.composing/files/gree_download_dir/" />
+
+    <external-path
+        name="external_files"
+        path="." />
+</paths>

@@ -26,7 +26,6 @@ android {
 
 import cn.hwj.buildplugin.* //import cn.hwj.buildplugin.*  注意插件会报无引用
 dependencies {
-
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     //组件化多个apk,能安装无法打开，Android app won't build -- The minCompileSdk (31) specified in a dependency's androidx.work:work-runtime:2.7.0-beta01
