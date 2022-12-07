@@ -16,6 +16,9 @@
         <activity
             android:name=".ListActivity"
             android:exported="false" />
+        <activity
+            android:name=".FileWebActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

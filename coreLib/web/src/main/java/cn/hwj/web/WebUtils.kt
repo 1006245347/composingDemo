@@ -19,12 +19,6 @@ object WebUtils {
         println("testWeb()>>>")
     }
 
-    /*无wifi 也可以下载内核50mb*/
-    fun setX5Config(forceStart: Boolean = false) {
-        QbSdk.setNeedInitX5FirstTime(forceStart)
-        QbSdk.setDownloadWithoutWifi(forceStart)
-    }
-
     /*冷启动优化，配置和DexClassLoaderProviderService的使用*/
     fun perStartX5() {
         // 在调用TBS初始化、创建WebView之前进行如下配置
@@ -32,6 +26,12 @@ object WebUtils {
         map[TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER] = true
         map[TbsCoreSettings.TBS_SETTINGS_USE_DEXLOADER_SERVICE] = true
         QbSdk.initTbsSettings(map)
+    }
+
+    /*无wifi 也可以下载内核50mb*/
+    fun setX5Config(forceStart: Boolean = false) {
+        QbSdk.setNeedInitX5FirstTime(forceStart)
+        QbSdk.setDownloadWithoutWifi(forceStart)
     }
 
     /*初始化 x5*/

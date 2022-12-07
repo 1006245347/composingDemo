@@ -16,9 +16,10 @@
             android:name="cn.hwj.web.X5ProcessService"
             android:exported="false"
             android:process=":web" />
+        <!--x5 成功加载pdf/xls/txt/docx-->
         <provider
             android:name="com.tencent.smtt.utils.FileProvider"
-            android:authorities="cn.hwj.web.provider"
+            android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

@@ -56,7 +56,12 @@ class SearchActivity : AppCompatActivity() {
 //        CoreUtils.testCrashUpload()
 //        DRouter.build(RoutePath.SEARCH_ACTIVITY_LIST)
 //            .start()
-        DRouter.build(RoutePath.SEARCH_ACTIVITY_WEB)
+
+//        DRouter.build(RoutePath.SEARCH_ACTIVITY_WEB)
+//            .putExtra("url","https://www.baidu.com")
+//            .start()
+
+        DRouter.build(RoutePath.SEARCH_ACTIVITY_FILE)
             .putExtra("url","https://www.baidu.com")
             .start()
     }

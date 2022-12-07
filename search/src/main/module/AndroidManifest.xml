@@ -16,6 +16,7 @@
         android:theme="@style/Theme.ComposingDemo">
         <activity
             android:name=".FileWebActivity"
+            android:process=":web"
             android:exported="false" />
         <activity
             android:name=".WebActivity"
@@ -32,6 +33,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
