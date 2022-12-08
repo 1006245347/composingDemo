@@ -45,51 +45,53 @@ class FileWebActivity : WebActivity(), ValueCallback<String> {
         printV("x5-state=${QbSdk.isTbsCoreInited()}")
         val tvInfo = findViewById<TextView>(R.id.tvInfo)
         tvInfo.setOnClickListener {
-
-//            if (QbSdk.is)
             //要文件权限
-//            openFile()
-            openFileReader(this, pdfFile) // ok //试过下载插件失败
+//            openFileReader(this, pdfFile) // ok //试过下载插件失败
 //            openFileReader(this, xlsFile)//ok
 //            openFileReader(this, docxFile)// ok
 //            openFileReader(this,txtFile)//ok
+            CoreUtils.testCrashUpload()
+            try {
+                printV("${QbSdk.isSuportOpenFile("pdf", 2)}")
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 
-    private fun openFile() {
-        val params = hashMapOf<String, String>()
-        params.put("local", "true")
-        params.put("entryId", "2")
-        params.put("allowAutoDestroy", "true")
-        val jo = JSONObject()
-        try {
-            jo.put("pkName", this.packageName)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        params.put("menuData", jo.toString())
-        QbSdk.openFileReader(this, pdfFile, params, this)
-    }
-
-
-    fun openFileReader(context: Context, pathName: String?) {
+    private fun openFileReader(context: Context, pathName: String?) {
         val params = HashMap<String, String>()
         params["local"] = "true"
-        val Object = JSONObject()
+        params["style"] = "1" //1是微信样式
+        params["topBarBgColor"] = "#2CFC47"
+        val obj = JSONObject()
         try {
-            Object.put("pkgName", context.getApplicationContext().getPackageName())
+            obj.put("pkgName", context.applicationContext.packageName)
+            obj.put("thirdCtx", "test_hwj>>>") //sdk只原样
+            obj.put("className", "cn.hwj.search.ListActivity")
+            obj.put(
+                "menuItems",
+                "[" + "{id:0,iconResId:" + R.mipmap.ic_launcher_round + ",text:\"menu0\"}," +
+                        " {id:1,iconResId:" + R.mipmap.ic_launcher_round + ",text:\"menu1\"}," +
+                        " {id:2,iconResId:" + R.mipmap.ic_launcher_round + ",text:\"menu2\"}" + "]"
+            )
         } catch (e: JSONException) {
             e.printStackTrace()
         }
-        params["menuData"] = Object.toString()
+        params["menuData"] = obj.toString()
         QbSdk.getMiniQBVersion(context)
         val ret: Int = QbSdk.openFileReader(context, pathName, params, this)
 
-        //openFileReaderListWithQBDownload
+
     }
 
-    override fun onReceiveValue(p0: String?) {
-
+    override fun onReceiveValue(msg: String?) {
+        //单进程打开文件后 回调的msg 存在以下可关闭当前进程，减少内存
+        //openFileReader open in QB                  用 QQ 浏览器打开
+        //filepath error TbsReaderDialogClosed
+        //default browser:
+        //filepath error
+        //fileReaderClosed
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {

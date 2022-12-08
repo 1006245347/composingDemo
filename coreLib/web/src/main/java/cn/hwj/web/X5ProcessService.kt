@@ -13,23 +13,29 @@ import com.tencent.smtt.sdk.QbSdk
 class X5ProcessService : Service() {
 
     private var mAppId: String? = null
+    private var isDebug = true
 
-    override fun onCreate() {
-        super.onCreate()
-        Log.v("TAG","X5Service-onCreate>>>")
-    }
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         mAppId = intent?.getStringExtra("appId")
-        WebUtils.initX5Core(this.applicationContext, mAppId+"", true, object : QbSdk.PreInitCallback {
-            override fun onCoreInitFinished() {
-                Log.v("TAG","onCoreInitFinished>>> " +
-                        WebUtils.getCurProcessName(this@X5ProcessService)+
-                        " $mAppId")
-            }
+        intent?.let {
+            isDebug = it.getBooleanExtra("debug", true)
+        }
+        WebUtils.initX5Core(
+            this.applicationContext,
+            "$mAppId",
+            isDebug,
+            object : QbSdk.PreInitCallback {
+                override fun onCoreInitFinished() {
+                    Log.v(
+                        "TAG", "onCoreInitFinished>>> " +
+                                WebUtils.getCurProcessName(this@X5ProcessService) +
+                                " $mAppId"
+                    )
+                }
 
-            override fun onViewInitFinished(p0: Boolean) {
-            }
-        })
+                override fun onViewInitFinished(p0: Boolean) {
+                }
+            })
         return super.onStartCommand(intent, flags, startId)
     }
 

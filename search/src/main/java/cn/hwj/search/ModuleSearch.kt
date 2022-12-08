@@ -17,19 +17,27 @@ class ModuleSearch : BaseModuleInit() {
 
     override fun onCreate() {
         super.onCreate()
-        //极光推送初始化  这里的上下文要封装下
+
+        val isDebug=true  //测试调试
+        val crashId="4c673d3784"
+
+        //极光推送初始化  这里会开启新的进程
+        PushHelper.setPushDebug(isDebug)
         PushHelper.initPushArg(ModuleSearch().getModuleContext(), "search")
 
         //第一种方式x5浏览器初始化 新开进程 疑问：文档中bugly要上报x5的异常信息是在新进程，要
         //两次日志框架初始化？测试下
-        WebUtils.startX5WebProcessPreInitService(getModuleContext(), "4c673d3784")
-        //第二种
+        WebUtils.startX5WebProcessPreInitService(getModuleContext(), crashId, debug = isDebug)
+
+        //第二种,这里内部在主进程初始化了日志框架
 //        WebUtils.let {
 //            it.perStartX5()
 //            it.setX5Config(true)
-//            it.initX5Core(getModuleContext(), "4c673d3784", true, qbCall)
+//            it.initX5Core(getModuleContext(), crashId, debug = isDebug, qbCall)
 //        }
-        CoreUtils.initCrashReport(getModuleContext(), "4c673d3784", true)
+        
+        //第二种要注释以下initCrashReport，每个进程是独立的，在主进程初始化一次
+        CoreUtils.initCrashReport(getModuleContext(), crashId, debug = isDebug)
     }
 
     override fun onActivityCreate(activity: Activity, p1: Bundle?) {

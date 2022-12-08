@@ -16,11 +16,10 @@ import org.json.JSONObject
  */
 class PushMessageReceiver : JPushMessageReceiver() {
 
-    /*统一处理解析消息体,然后通过广播发送出去*/
+    /*回调context是主进程的，统一处理解析消息体,然后通过广播发送出去*/
     private fun parsePushEvent(context: Context, customMessage: CustomMessage) {
         try {
             Log.v("TAG", "CTX=${context} $customMessage")
-//            val jsonObject = JSONObject(customMessage.message)
             PushHelper.instance?.callbackReceive("$customMessage")
         } catch (e: Exception) {
             e.printStackTrace()
@@ -47,7 +46,7 @@ class PushMessageReceiver : JPushMessageReceiver() {
     }
 
     override fun onNotifyMessageArrived(context: Context, message: NotificationMessage) {
-        Logger.v("TAG","$message")
+        Logger.v("TAG", "$message")
         var json: JSONObject?
         try {
             json = JSONObject(message.notificationContent.toString())
@@ -84,7 +83,7 @@ class PushMessageReceiver : JPushMessageReceiver() {
     }
 
     override fun onAliasOperatorResult(context: Context?, jPushMessage: JPushMessage) {
-        PushHelper.instance?.onAliasOperatorResult(context,jPushMessage)
+        PushHelper.instance?.onAliasOperatorResult(context, jPushMessage)
         super.onAliasOperatorResult(context, jPushMessage)
     }
 

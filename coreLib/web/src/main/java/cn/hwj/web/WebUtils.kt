@@ -4,7 +4,6 @@ import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
 import android.os.Process
-import android.util.Log
 import com.tencent.bugly.crashreport.CrashReport
 import com.tencent.bugly.crashreport.CrashReport.CrashHandleCallback
 import com.tencent.bugly.crashreport.CrashReport.UserStrategy
@@ -37,7 +36,7 @@ object WebUtils {
     /*初始化 x5*/
     fun initX5Core(
         context: Context?,
-        appId: String,debug:Boolean,
+        appId: String, debug: Boolean,
         callback: QbSdk.PreInitCallback
     ) {
 
@@ -88,12 +87,10 @@ object WebUtils {
                     }
                 }
             })
-            //统一初始化 调试时第三个参数=true 在其他进程又初始化日志框架有效？
+            //统一初始化 调试时第三个参数=true 在其他进程又初始化日志框架有效?
             CrashReport.initCrashReport(context, appId, debug, strategy)
         }
     }
-
-
 
 
     /**
@@ -106,16 +103,19 @@ object WebUtils {
      * 缺点：
      * 进程的创建占用手机整体的内存，demo 约为 150 MB
      */
-    fun startX5WebProcessPreInitService(context: Context?, appId: String): Boolean {
+    fun startX5WebProcessPreInitService(
+        context: Context?,
+        appId: String,
+        debug: Boolean = true
+    ): Boolean {
         val currentProcessName = QbSdk.getCurrentProcessName(context)
         // 设置多进程数据目录隔离，不设置的话系统内核多个进程使用WebView会crash，X5下可能ANR
         WebView.setDataDirectorySuffix(QbSdk.getCurrentProcessName(context))
 //        println("TAG-$currentProcessName")
-        Log.v("TAG","x5-process=$currentProcessName")
         if (currentProcessName == context?.packageName) {
-//            context?.startService(Intent(context, X5ProcessService::class.java))
             val i = Intent(context, X5ProcessService::class.java)
             i.putExtra("appId", appId)
+            i.putExtra("debug", debug)
             context?.startService(i)
             return true
         }

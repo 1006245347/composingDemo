@@ -3,12 +3,15 @@ package cn.hwj.core.global
 import android.app.Application
 import android.content.Context
 import android.support.multidex.MultiDex
-import android.support.multidex.MultiDexApplication
 import android.text.TextUtils
 import cn.hwj.core.CoreUtils.getCurProcessName
 import com.didi.drouter.api.DRouter
 import java.io.File
 
+/**
+ * @author by jason-何伟杰，2022/12/8
+ * des:共享Application
+ */
 open class CoreApplicationProvider : Application() {
     companion object {
         // 全局共享的 Application
@@ -27,13 +30,22 @@ open class CoreApplicationProvider : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        if (TextUtils.equals(getCurProcessName(this), packageName)) {
+        if (isAppMainProcess(this)) {
             appContext = this
             initApp()//确保只在主进程初始化
             ModuleInitDelegate.reorder()
             ModuleInitDelegate.onCreate()
+        printV("Main》》 $this")
         }
-        printV("Application执行次数》》$packageName")
+        printV("Application执行次数》》 $this")
+    }
+
+    //模块的初始化保证在主进程中
+    private fun isAppMainProcess(context: Context): Boolean {
+        if (TextUtils.equals(getCurProcessName(context), packageName)) {
+            return true
+        }
+        return false
     }
 
     /*适合基础库的初始化，会回调到所有模块*/
@@ -51,15 +63,15 @@ open class CoreApplicationProvider : Application() {
 //                printV("custom_destroy>>$activity")
 //            }
 //        })
-
         DRouter.init(this) //初始化路由表
     }
 
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(base)
         MultiDex.install(base)
-        printV("attachBaseContext执行次数》》$packageName")
-        ModuleInitDelegate.attachBaseContext(base)
+        if (isAppMainProcess(this)) {
+            ModuleInitDelegate.attachBaseContext(base)
+        }
     }
 
     override fun onLowMemory() {
@@ -76,6 +88,4 @@ open class CoreApplicationProvider : Application() {
         super.onTerminate()
         ModuleInitDelegate.onTerminate()
     }
-
-
 }
