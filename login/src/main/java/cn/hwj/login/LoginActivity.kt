@@ -1,7 +1,6 @@
 package cn.hwj.login
 
 import android.Manifest
-import android.os.Build
 import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toast
@@ -9,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import cn.hwj.core.CoreUtils
 import cn.hwj.route.RoutePath
 import com.didi.drouter.annotation.Router
+import com.didi.drouter.api.DRouter
 import com.permissionx.guolindev.PermissionX
 
 /**
@@ -51,6 +51,11 @@ class LoginActivity : AppCompatActivity() {
         return stringBuilder.toString()
     }
 
+    private fun launchAty() {
+        DRouter.build(RoutePath.SEARCH_ACTIVITY_INPUT)
+            .start()
+    }
+
     private fun askPermission() {
         val requestList = ArrayList<String>()
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -58,6 +63,8 @@ class LoginActivity : AppCompatActivity() {
 //            requestList.add(Manifest.permission.READ_MEDIA_AUDIO)
 //            requestList.add(Manifest.permission.READ_MEDIA_VIDEO)
 //        } //Android 13 特有权限，由于编译器在sdk33无法自动补全xml代码，后续再升级As
+        requestList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        requestList.add(Manifest.permission.READ_EXTERNAL_STORAGE)
         PermissionX.init(this)
             .permissions(requestList)
             .onExplainRequestReason { scope, deniedList ->
@@ -66,6 +73,7 @@ class LoginActivity : AppCompatActivity() {
             }.request { allGranted, grantedList, deniedList ->
                 if (allGranted) {
                     Toast.makeText(this, "all granted!", Toast.LENGTH_SHORT).show()
+                    launchAty()
                 } else {
                     Toast.makeText(this, "Deny $deniedList!", Toast.LENGTH_SHORT).show()
                 }

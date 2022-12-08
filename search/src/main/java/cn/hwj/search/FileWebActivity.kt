@@ -45,12 +45,12 @@ class FileWebActivity : WebActivity(), ValueCallback<String> {
         printV("x5-state=${QbSdk.isTbsCoreInited()}")
         val tvInfo = findViewById<TextView>(R.id.tvInfo)
         tvInfo.setOnClickListener {
+//            CoreUtils.testCrashUpload()
             //要文件权限
-//            openFileReader(this, pdfFile) // ok //试过下载插件失败
+            openFileReader(this, pdfFile) // ok //试过下载插件失败
 //            openFileReader(this, xlsFile)//ok
 //            openFileReader(this, docxFile)// ok
 //            openFileReader(this,txtFile)//ok
-            CoreUtils.testCrashUpload()
             try {
                 printV("${QbSdk.isSuportOpenFile("pdf", 2)}")
             } catch (e: Exception) {

@@ -33,16 +33,18 @@ subprojects { subproject ->
         //这里鉴别各业务模块，方便单独打包运行  模块化
         if (DepManager.isDebug) {
             apply plugin: "com.android.application"
+            apply plugin: "com.didi.drouter"
+            //路由表的一些配置
+            drouter {
+                debug = DepManager.isDebug //Logcat中抓取 DRouterCore 关键字
+            }
         } else {
             apply plugin: "com.android.library"
         }
         apply plugin: "org.jetbrains.kotlin.android"
         apply plugin: "kotlin-kapt"
-        apply plugin: "com.didi.drouter"
-        //路由表的一些配置
-        drouter {
-            debug = DepManager.isDebug //Logcat中抓取 DRouterCore 关键字
-        }
+
+
     } else { //这里放所有的Library 组件化
         apply plugin: "com.android.library"
         apply plugin: "org.jetbrains.kotlin.android"

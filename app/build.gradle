@@ -14,8 +14,12 @@ android {
         ndk { //设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
 //            abiFilters "armeabi", "armeabi-v7a"//, "arm64-v8a", "x86", "arm64-v8a", "x86_64"
             abiFilters "armeabi-v7a"//, "arm64-v8a", "x86", "arm64-v8a", "x86_64"
-
         }
+        manifestPlaceholders =[
+                JPUSH_PKGNAME : "cn.hwj.composing",
+                JPUSH_APPKEY : "0596c42f24ac0dbd0dc6499f", //JPush 上注册的包名对应的 Appkey.
+                JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
+        ]
     }
     //指定打包后应用名称
     android.applicationVariants.all { variant ->
@@ -27,7 +31,7 @@ android {
     // 签名设置
     signingConfigs {
         myConfig {
-            storeFile file("./gree_pad_app.jks")
+            storeFile file("../gree_pad_app.jks")
             storePassword "123456"
             keyAlias "gree"
             keyPassword "123456"
