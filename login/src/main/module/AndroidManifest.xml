@@ -18,7 +18,7 @@
         android:theme="@style/Theme.ComposingDemo"
         tools:ignore="HardcodedDebugMode">
         <activity
-            android:name=".TabActivity"
+            android:name=".tab.TabActivity"
             android:exported="false" />
         <activity
             android:name=".WelcomeActivity"

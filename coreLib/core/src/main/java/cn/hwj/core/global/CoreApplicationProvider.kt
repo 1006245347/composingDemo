@@ -35,7 +35,6 @@ open class CoreApplicationProvider : Application() {
             initApp()//确保只在主进程初始化
             ModuleInitDelegate.reorder()
             ModuleInitDelegate.onCreate()
-        printV("Main》》 $this")
         }
         printV("Application执行次数》》 $this")
     }
@@ -50,19 +49,6 @@ open class CoreApplicationProvider : Application() {
 
     /*适合基础库的初始化，会回调到所有模块*/
     open fun initApp() {
-//        ???多个module下，如何都实现监听Activity生命并操作却不重复，？？每个module用接口不会吧
-        //暂时在ModuleInitDelegate处理，后续再看
-//        registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacksImpl {
-//            override fun onActivityCreated(activity: Activity, p1: Bundle?) {
-//                super.onActivityCreated(activity, p1)
-//                printV("custom_create>>$activity")
-//            }
-//
-//            override fun onActivityDestroyed(activity: Activity) {
-//                super.onActivityDestroyed(activity)
-//                printV("custom_destroy>>$activity")
-//            }
-//        })
         DRouter.init(this) //初始化路由表
     }
 

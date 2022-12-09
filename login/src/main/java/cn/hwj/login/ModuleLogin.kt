@@ -5,6 +5,7 @@ import android.app.Application
 import android.os.Bundle
 import cn.hwj.core.global.BaseModuleInit
 import cn.hwj.core.global.CoreApplicationProvider
+import cn.hwj.core.global.printV
 
 /**
  * @author by jason-何伟杰，2022/11/30
@@ -19,6 +20,7 @@ class ModuleLogin : BaseModuleInit() {
     //监听回调所有的Activity
     override fun onActivityCreate(activity: Activity, p1: Bundle?) {
         super.onActivityCreate(activity, p1)
+        printV("login_module_check_create>$activity")
     }
 
     override fun onActivityDestroyed(activity: Activity) {

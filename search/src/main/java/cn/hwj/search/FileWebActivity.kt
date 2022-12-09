@@ -63,7 +63,7 @@ class FileWebActivity : WebActivity(), ValueCallback<String> {
         val params = HashMap<String, String>()
         params["local"] = "true"
         params["style"] = "1" //1是微信样式
-        params["topBarBgColor"] = "#2CFC47"
+        params["topBarBgColor"] = "#2CFC47"  //想去掉个字符串  QQ浏览器文件服务
         val obj = JSONObject()
         try {
             obj.put("pkgName", context.applicationContext.packageName)

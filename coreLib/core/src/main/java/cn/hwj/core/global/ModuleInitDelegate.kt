@@ -23,47 +23,45 @@ object ModuleInitDelegate : IModuleInit {
 
     override fun onCreate() {
         moduleList.forEach {
-            it.onCreate()
-            if (moduleList.indexOf(it) == 0) //限制只执行一次
-            //让每个module都有处理Activity的监听,要过滤，不然集成模式下会重复实现多次
-                CoreApplicationProvider.appContext.registerActivityLifecycleCallbacks(object :
-                    ActivityLifecycleCallbacksImpl {
-                    override fun onActivityCreated(activity: Activity, p1: Bundle?) {
-                        super.onActivityCreated(activity, p1)
-                        it.onActivityCreate(activity, p1)
-                    }
-
-                    override fun onActivityStarted(activity: Activity) {
-                        super.onActivityStarted(activity)
-                        it.onActivityStarted(activity)
-                    }
-
-                    override fun onActivityResumed(activity: Activity) {
-                        super.onActivityResumed(activity)
-                        it.onActivityResumed(activity)
-                    }
-
-                    override fun onActivityPaused(activity: Activity) {
-                        super.onActivityPaused(activity)
-                        it.onActivityPaused(activity)
-                    }
-
-                    override fun onActivityStopped(activity: Activity) {
-                        super.onActivityStopped(activity)
-                        it.onActivityStopped(activity)
-                    }
-
-                    override fun onActivitySaveInstanceState(activity: Activity, p1: Bundle) {
-                        super.onActivitySaveInstanceState(activity, p1)
-                        it.onActivitySaveInstanceState(activity, p1)
-                    }
-
-                    override fun onActivityDestroyed(activity: Activity) {
-                        super.onActivityDestroyed(activity)
-                        it.onActivityDestroyed(activity)
-                    }
-                })
+            it.onCreate() //执行每个module的第三方sdk初始化
         }
+        CoreApplicationProvider.appContext.registerActivityLifecycleCallbacks(object :
+            ActivityLifecycleCallbacksImpl {
+            override fun onActivityCreated(activity: Activity, p1: Bundle?) {
+                super.onActivityCreated(activity, p1)
+                getModule(activity)?.onActivityCreate(activity, p1)
+            }
+
+            override fun onActivityStarted(activity: Activity) {
+                super.onActivityStarted(activity)
+                getModule(activity)?.onActivityStarted(activity)
+            }
+
+            override fun onActivityResumed(activity: Activity) {
+                super.onActivityResumed(activity)
+                getModule(activity)?.onActivityResumed(activity)
+            }
+
+            override fun onActivityPaused(activity: Activity) {
+                super.onActivityPaused(activity)
+                getModule(activity)?.onActivityPaused(activity)
+            }
+
+            override fun onActivityStopped(activity: Activity) {
+                super.onActivityStopped(activity)
+                getModule(activity)?.onActivityStopped(activity)
+            }
+
+            override fun onActivitySaveInstanceState(activity: Activity, p1: Bundle) {
+                super.onActivitySaveInstanceState(activity, p1)
+                getModule(activity)?.onActivitySaveInstanceState(activity, p1)
+            }
+
+            override fun onActivityDestroyed(activity: Activity) {
+                super.onActivityDestroyed(activity)
+                getModule(activity)?.onActivityDestroyed(activity)
+            }
+        })
     }
 
     override fun attachBaseContext(base: Context) {
@@ -82,6 +80,26 @@ object ModuleInitDelegate : IModuleInit {
 
     override fun onTerminate() {
         moduleList.forEach { it.onTerminate() }
+    }
+
+    /*需要确保每个module的包名都是3层目录*/
+    private fun getLocalPkName(clsPath: String): String {
+        var path = ""
+        var index = clsPath.indexOf(".") //获取第一个.的位置
+        index = clsPath.indexOf(".", index + 1) //获取第二个
+        index = clsPath.indexOf(".", index + 1) //获取第三个
+        path = clsPath.substring(0, index)
+        return path
+    }
+
+    /*追溯当前Activity所在的module的包名*/
+    private fun getModule(activity: Activity): IModuleInit? {
+        for (m in moduleList) {
+            if (m.toString().contains(getLocalPkName(activity.localClassName))) {
+                return m
+            }
+        }
+        return null
     }
 }
 

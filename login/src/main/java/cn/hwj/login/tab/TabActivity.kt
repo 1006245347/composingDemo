@@ -1,7 +1,8 @@
-package cn.hwj.login
+package cn.hwj.login.tab
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import cn.hwj.login.R
 import cn.hwj.route.RoutePath
 import com.didi.drouter.annotation.Router
 
