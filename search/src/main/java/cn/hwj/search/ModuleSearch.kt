@@ -4,10 +4,12 @@ import android.app.Activity
 import android.os.Bundle
 import cn.hwj.core.CoreUtils
 import cn.hwj.core.global.BaseModuleInit
+import cn.hwj.core.global.CoreApplicationProvider
 import cn.hwj.core.global.printV
 import cn.hwj.push.PushHelper
 import cn.hwj.web.WebUtils
 import com.tencent.smtt.sdk.QbSdk
+import java.io.File
 
 /**
  * @author by jason-何伟杰，2022/11/30
@@ -30,14 +32,14 @@ class ModuleSearch : BaseModuleInit() {
 //        WebUtils.startX5WebProcessPreInitService(getModuleContext(), crashId, debug = isDebug)
 
         //第二种,这里内部在主进程初始化了日志框架
-//        WebUtils.let {
-//            it.perStartX5()
-//            it.setX5Config(true)
-//            it.initX5Core(getModuleContext(), crashId, debug = isDebug, qbCall)
-//        }
+        WebUtils.let {
+            it.perStartX5()
+            it.setX5Config(true)
+            it.initX5Core(getModuleContext(), crashId, debug = isDebug, qbCall)
+        }
         
         //第二种要注释以下initCrashReport，每个进程是独立的，在主进程初始化一次
-        CoreUtils.initCrashReport(getModuleContext(), crashId, debug = isDebug)
+//        CoreUtils.initCrashReport(getModuleContext(), crashId, debug = isDebug)
     }
 
     override fun onActivityCreate(activity: Activity, p1: Bundle?) {
@@ -59,4 +61,8 @@ class ModuleSearch : BaseModuleInit() {
     }
     override val priority: Int
         get() = 10
+}
+
+fun ModuleSearch.getCacheDir():File?{
+    return CoreApplicationProvider.getAppCacheDir()
 }

@@ -120,8 +120,8 @@ interface IModuleInit {
 
 abstract class BaseModuleInit : IModuleInit {
 
-    fun getModuleApplication(): Application {
-        return CoreApplicationProvider.appContext
+    fun getModuleApplication(): CoreApplicationProvider {
+        return CoreApplicationProvider.appContext as CoreApplicationProvider
     }
 
     fun getModuleContext(): Context {

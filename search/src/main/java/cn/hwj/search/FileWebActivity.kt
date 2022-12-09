@@ -1,18 +1,23 @@
 package cn.hwj.search
 
+import android.Manifest
 import android.content.Context
 import android.os.Bundle
-import android.os.Environment
+import android.util.Log
 import android.view.KeyEvent
 import android.widget.TextView
+import android.widget.Toast
 import cn.hwj.core.CoreUtils
+import cn.hwj.core.global.CoreApplicationProvider
 import cn.hwj.core.global.printV
 import cn.hwj.route.RoutePath
 import com.didi.drouter.annotation.Router
+import com.permissionx.guolindev.PermissionX
 import com.tencent.smtt.sdk.QbSdk
 import com.tencent.smtt.sdk.ValueCallback
 import org.json.JSONException
 import org.json.JSONObject
+import java.io.File
 
 /**
  * @author by jason-何伟杰，2022/12/7
@@ -23,16 +28,11 @@ import org.json.JSONObject
 @Router(path = RoutePath.SEARCH_ACTIVITY_FILE)
 class FileWebActivity : WebActivity(), ValueCallback<String> {
 
-    val mFilePath = Environment.getExternalStorageDirectory().toString()
-
-    //在测试机中添加以下文件
-    val pdfFile = "/storage/emulated/0/Documents/ThirdInterface.pdf"
-    val xlsFile = "/storage/emulated/0/Documents/buglist.xls"
-    val txtFile = "/storage/emulated/0/Documents/web_进入.txt"//带中文的文件名
-    val docxFile = "/storage/emulated/0/Documents/Boxtech.docx"
+    var mCount = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        actionBar?.hide()
     }
 
     override fun initWeb() {
@@ -45,17 +45,48 @@ class FileWebActivity : WebActivity(), ValueCallback<String> {
         printV("x5-state=${QbSdk.isTbsCoreInited()}")
         val tvInfo = findViewById<TextView>(R.id.tvInfo)
         tvInfo.setOnClickListener {
-//            CoreUtils.testCrashUpload()
-            //要文件权限
-            openFileReader(this, pdfFile) // ok //试过下载插件失败
-//            openFileReader(this, xlsFile)//ok
-//            openFileReader(this, docxFile)// ok
-//            openFileReader(this,txtFile)//ok
             try {
                 printV("${QbSdk.isSuportOpenFile("pdf", 2)}")
             } catch (e: Exception) {
                 e.printStackTrace()
             }
+            openFileReader(this, fileList[mCount])
+            mCount++
+            if (mCount == 7) mCount = 0
+            tvInfo.text = "read$mCount"
+        }
+        copyFile("testfiles", "tbsReadfile")
+        PermissionX.init(this).permissions(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            .request { allGranted, grantedList, deniedList ->
+                if (allGranted) {
+                    copyFile("testfiles", "tbsReadfile")
+                } else {
+                    Toast.makeText(this, "Deny $deniedList!", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
+    private fun copyFile(srcPath: String, dscPath: String) {
+        FileUtils.instance.copyAssetsToSD(srcPath, dscPath)
+            .setFileOperateCallback(object : FileUtils.FileOperateCallback {
+                override fun onSuccess() {
+                    getLocalFile()
+                }
+
+                override fun onFailed(error: String?) {
+                    printV("err_copy=$error")
+                }
+            })
+    }
+
+    val fileList = mutableListOf<String>()
+    private fun getLocalFile() {
+        fileList.clear()
+//        val dirName = File(Environment.getExternalStorageDirectory(), "tbsReadfile").absolutePath
+        val dirName = File(ModuleSearch().getCacheDir(), "tbsReadfile")
+        for (s in assets.list("testfiles")!!) {
+            Log.v("TAG", "file=${dirName}/$s")
+            fileList.add("$dirName/$s")
         }
     }
 
@@ -82,16 +113,19 @@ class FileWebActivity : WebActivity(), ValueCallback<String> {
         QbSdk.getMiniQBVersion(context)
         val ret: Int = QbSdk.openFileReader(context, pathName, params, this)
 
-
+        printV("openFile-error=$ret")
     }
 
     override fun onReceiveValue(msg: String?) {
+
         //单进程打开文件后 回调的msg 存在以下可关闭当前进程，减少内存
         //openFileReader open in QB                  用 QQ 浏览器打开
         //filepath error TbsReaderDialogClosed
         //default browser:
         //filepath error
         //fileReaderClosed
+
+        printV("openFile-error2=$msg")
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
