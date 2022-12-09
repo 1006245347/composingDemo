@@ -84,7 +84,7 @@ object ModuleInitDelegate : IModuleInit {
 
     /*需要确保每个module的包名都是3层目录*/
     private fun getLocalPkName(clsPath: String): String {
-        var path = ""
+        var path: String
         var index = clsPath.indexOf(".") //获取第一个.的位置
         index = clsPath.indexOf(".", index + 1) //获取第二个
         index = clsPath.indexOf(".", index + 1) //获取第三个
@@ -95,7 +95,7 @@ object ModuleInitDelegate : IModuleInit {
     /*追溯当前Activity所在的module的包名*/
     private fun getModule(activity: Activity): IModuleInit? {
         for (m in moduleList) {
-            if (m.toString().contains(getLocalPkName(activity.localClassName))) {
+            if (m.toString().contains(getLocalPkName(activity.javaClass.name))) {
                 return m
             }
         }
