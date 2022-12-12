@@ -1,7 +1,7 @@
 package cn.hwj.search
 
+import android.Manifest
 import android.os.Bundle
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -10,8 +10,12 @@ import cn.hwj.core.global.printV
 import cn.hwj.push.PushHelper
 import cn.hwj.push.PushListener
 import cn.hwj.route.RoutePath
+import cn.hwj.web.WebUtils
 import com.didi.drouter.annotation.Router
 import com.didi.drouter.api.DRouter
+import com.permissionx.guolindev.PermissionX
+import com.tencent.smtt.sdk.QbSdk
+import com.tencent.smtt.sdk.TbsDownloader
 import org.json.JSONObject
 
 /**
@@ -28,9 +32,22 @@ class SearchActivity : AppCompatActivity() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+        PermissionX.init(this)
+            .permissions(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+            .request { allGranted, grantedList, deniedList ->
+                if (allGranted) {
+                    initTbs()
+                } else {
+                    Toast.makeText(this, "Deny permission!", Toast.LENGTH_SHORT).show()
+                }
+            }
     }
 
-    lateinit var tvInfo: TextView
+    private lateinit var tvInfo: TextView
     private fun initView() {
         tvInfo = findViewById(R.id.tvInfo)
         appendTxt("packageName: $packageName \n")
@@ -38,16 +55,22 @@ class SearchActivity : AppCompatActivity() {
         appendTxt("thread: ${Thread.currentThread().name} \n")
         appendTxt("appName: ${getString(R.string.app_name)} \n")
         appendTxt("Activity: $this")
-
-        tvInfo.setOnClickListener {
-            clickEvent()
-        }
+        tvInfo.setOnClickListener { clickEvent() }
 
         //接收推送消息的处理
-        PushHelper.instance?.pushListener=object : PushListener{
+        PushHelper.instance?.pushListener = object : PushListener {
             override fun handlePushMsg(msg: String) {
-             printV("handle1>>$msg")
+                printV("handle1>>$msg")
             }
+        }
+    }
+
+    private fun initTbs() {
+        printV("initTbs>>")
+        WebUtils.let {
+//            it.perStartX5()
+//            it.setX5Config(true)
+            it.initX5Core(this.applicationContext, "4c673d3784", true, qbCall)
         }
     }
 
@@ -62,7 +85,8 @@ class SearchActivity : AppCompatActivity() {
 //            .start()
 
         DRouter.build(RoutePath.SEARCH_ACTIVITY_FILE)
-            .putExtra("url","https://www.baidu.com")
+//            .putExtra("url", "https://www.baidu.com") //百度首次安装原生必不行！！
+            .putExtra("url", "http://ark.gree.com/search/login/oauth2/authorize")
             .start()
     }
 
@@ -75,15 +99,40 @@ class SearchActivity : AppCompatActivity() {
         return stringBuilder.toString()
     }
 
-    private fun test(){
-        val s=getString(R.string.app_name_pad)
+    private fun test() {
+        val s = getString(R.string.app_name_pad)
         printV("s=$s") //竟然自动把双引号干掉了
-        val js=JSONObject(s)
+        val js = JSONObject(s)
         printV("s=${js.getJSONObject("_default")}")
         val jv = js.getJSONObject("_default")
-        jv?.let {
-            printV("id=${ it.optString("clubId")}")
+        printV("id=${jv.optString("clubId")}")
+    }
 
+    private fun startDownloadX5() { //要在子线程跑
+        TbsDownloader.startDownload(CoreUtils.getContext())
+    }
+
+    private var mRetry = 1
+    private val qbCall = object : QbSdk.PreInitCallback {
+        override fun onCoreInitFinished() {
+//            printV("x5call_finish>>")
+//            val map = mutableMapOf<String, Any>()
+//            map[TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER]=true
+//            QbSdk.initTbsSettings(map)
+        }
+
+        override fun onViewInitFinished(flag: Boolean) {
+            if (flag) {
+                printV("tbs_finish= x5 运行")
+            } else {  //首次安装本地没有X5内核可用，如果在X5初始化结束之前调用webview，那么默认会使用系统内核
+                //要观察这里，运行到这x5 、文件预览就失败了
+                printV("tbs_finish= sys web运行")
+//                QbSdk.reset(CoreUtils.getContext())
+                if (mRetry > 0) {
+//                    initTbs()
+                    mRetry--
+                }
+            }
         }
     }
 }

@@ -86,6 +86,9 @@ class X5WebView : WebView {
     }
 
     constructor(arg0: Context?) : super(arg0) {//        setBackgroundColor(85621);
+        this.webViewClient = client
+        initWebViewSettings()
+        this.view.isClickable = true
     } /* @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         //如果不做任何处理，浏览网页，点击系统“Back”键，整个Browser会调用finish()而结束自身，
@@ -96,4 +99,5 @@ class X5WebView : WebView {
         }
         return super.onKeyDown(keyCode, event);
     }*/
+
 }

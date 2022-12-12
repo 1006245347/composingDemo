@@ -13,7 +13,7 @@ class FileUtils {
     private val SUCCESS = 1
     private val FAILED = 0
 
-    private var context: Context = ModuleSearch().getModuleContext()
+    private var context: Context =SearchUtils.getModuleContext()
     private var callback: FileOperateCallback? = null
 
     @Volatile
@@ -63,10 +63,10 @@ class FileUtils {
     private fun copyAssetsToDst(context: Context?, srcPath: String, dstPath: String) {
         try {
             val fileNames = context!!.assets.list(srcPath)
-            printV("file===${fileNames} $srcPath")
+//            printV("file===${fileNames} $srcPath")
             if (fileNames!!.size > 0) {
 //                val file = File(Environment.getExternalStorageDirectory(), dstPath)
-                val file = File(ModuleSearch().getCacheDir(), dstPath)
+                val file = File(SearchUtils.getCacheDir(), dstPath)
                 if (!file.exists()) file.mkdirs()
                 for (fileName in fileNames) {
                     if (srcPath != "") { // assets 文件夹下的目录
@@ -81,7 +81,7 @@ class FileUtils {
                 }
             } else {
 //                val outFile = File(Environment.getExternalStorageDirectory(), dstPath)
-                val outFile = File(ModuleSearch().getCacheDir(), dstPath)
+                val outFile = File(SearchUtils.getCacheDir(), dstPath)
                 val `is` = context.assets.open(srcPath)
                 val fos = FileOutputStream(outFile)
                 val buffer = ByteArray(1024)

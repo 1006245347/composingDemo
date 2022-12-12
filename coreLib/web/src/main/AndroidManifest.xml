@@ -4,6 +4,10 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application>
         <!--启动优化 demo没有-->
@@ -16,6 +20,7 @@
             android:name="cn.hwj.web.X5ProcessService"
             android:exported="false"
             android:process=":web" />
+
         <!--x5 成功加载pdf/xls/txt/docx-->
         <provider
             android:name="com.tencent.smtt.utils.FileProvider"

@@ -120,14 +120,6 @@ interface IModuleInit {
 
 abstract class BaseModuleInit : IModuleInit {
 
-    fun getModuleApplication(): CoreApplicationProvider {
-        return CoreApplicationProvider.appContext as CoreApplicationProvider
-    }
-
-    fun getModuleContext(): Context {
-        return CoreApplicationProvider.appContext.applicationContext
-    }
-
     /**
      * 模块初始化优先级 越高初始化越快
      * Module中设置优先级越小越优先初始化

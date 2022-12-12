@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.app.AppCompatActivity
+import cn.hwj.core.CoreUtils
 import cn.hwj.core.global.printV
 import cn.hwj.core.global.setLogEnable
 import cn.hwj.route.RoutePath
@@ -63,7 +64,7 @@ class WelcomeActivity : AppCompatActivity() {
                 .start(this) { result ->
                     if (result.isActivityStarted) { //是否能成功打开
                         Toast.makeText(
-                            ModuleLogin().getApplication(),//             ModuleLogin().getModuleContext(),
+                         CoreUtils.getContext(),//             ModuleLogin().getModuleContext(),
                             "call 110 !",
                             Toast.LENGTH_SHORT
                         ).show()

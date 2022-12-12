@@ -31,7 +31,7 @@ class ModuleLogin : BaseModuleInit() {
         get() = 0 //越小越先初始化
 }
 
-/*扩展函数*/
-fun ModuleLogin.getApplication(): Application {
-    return CoreApplicationProvider.appContext
-}
+/*扩展函数 这种写法不行，每次都创建新对象*/
+//fun ModuleLogin.getApplication(): Application {
+//    return CoreApplicationProvider.appContext
+//}

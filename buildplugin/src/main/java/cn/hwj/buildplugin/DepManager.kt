@@ -18,6 +18,7 @@ object DepManager {
 
     const val core = "androidx.core:core-ktx:$core_ktx_version"
 
+    const val mutilx="androidx.multidex:multidex:2.0.1"
     const val appcompat = "androidx.appcompat:appcompat:$appcompat_version"
     const val material = "com.google.android.material:material:$material_version"
     const val constraintlayout =

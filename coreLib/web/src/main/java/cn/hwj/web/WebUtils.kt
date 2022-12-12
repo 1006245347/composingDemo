@@ -1,21 +1,32 @@
 package cn.hwj.web
 
 import android.app.ActivityManager
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Process
+import android.util.Log
 import com.tencent.bugly.crashreport.CrashReport
 import com.tencent.bugly.crashreport.CrashReport.CrashHandleCallback
 import com.tencent.bugly.crashreport.CrashReport.UserStrategy
 import com.tencent.smtt.export.external.TbsCoreSettings
 import com.tencent.smtt.sdk.QbSdk
+import com.tencent.smtt.sdk.TbsDownloader
 import com.tencent.smtt.sdk.TbsListener
 import com.tencent.smtt.sdk.WebView
-
 
 object WebUtils {
     fun testWeb() {
         println("testWeb()>>>")
+    }
+
+    /*判断是否成功使用x5*/
+    fun isSucX5(webView: X5WebView?): Boolean? {
+        webView?.let {
+            Log.v("TAG","IS--X5--${it.x5WebViewExtension!=null}")
+            return it.x5WebViewExtension != null
+        }
+        return false
     }
 
     /*冷启动优化，配置和DexClassLoaderProviderService的使用*/
@@ -37,61 +48,70 @@ object WebUtils {
     fun initX5Core(
         context: Context?,
         appId: String, debug: Boolean,
-        callback: QbSdk.PreInitCallback
+        callback: QbSdk.PreInitCallback?
     ) {
+//        if (!QbSdk.isTbsCoreInited()) {
+        //初始化
+        QbSdk.initX5Environment(context, callback)
+        QbSdk.setTbsListener(object : TbsListener {
+            override fun onDownloadFinish(i: Int) { //非100都是失败
+                if (i != 100) {  //成功会主线程
+//                    TbsDownloader.startDownload(context)
 
-        if (!QbSdk.isTbsCoreInited()) {
-            //初始化
-            QbSdk.initX5Environment(context, callback)
-            QbSdk.setTbsListener(object : TbsListener {
-                override fun onDownloadFinish(i: Int) {
-                    println("x5-download-finish>>>$i")
                 }
+                Log.v("TAG", "x5-download-finish>>>$i ${Thread.currentThread().name}")
+            }
 
-                override fun onInstallFinish(i: Int) {
-                    println("x5-download-install>>>$i")
-                }
+            override fun onInstallFinish(i: Int) { //非200都不成功
+                Log.v("TAG", "x5-download-install>>>$i")
+            }
 
-                override fun onDownloadProgress(i: Int) {
-                }
-            })
-            //联合上报崩溃日志
-            val strategy = UserStrategy(context)
-            strategy.setCrashHandleCallback(object : CrashHandleCallback() {
-                @Synchronized
-                override fun onCrashHandleStart(
-                    crashType: Int,
-                    errorType: String,
-                    errorMessage: String,
-                    errorStack: String
-                ): Map<String, String> {
-                    val map = LinkedHashMap<String, String>()
-                    val x5CrashInfo =
-                        WebView.getCrashExtraMessage(context)
-                    map["x5crashInfo"] = x5CrashInfo
-                    return map
-                }
+            override fun onDownloadProgress(i: Int) {
+                Log.v("TAG", "X5-progress-$i")
+            }
+        })
+        //联合上报崩溃日志
+        val strategy = UserStrategy(context)
+        strategy.setCrashHandleCallback(object : CrashHandleCallback() {
+            @Synchronized
+            override fun onCrashHandleStart(
+                crashType: Int,
+                errorType: String,
+                errorMessage: String,
+                errorStack: String
+            ): Map<String, String> {
+                val map = LinkedHashMap<String, String>()
+                val x5CrashInfo =
+                    WebView.getCrashExtraMessage(context)
+                map["x5crashInfo"] = x5CrashInfo
+                return map
+            }
 
-                @Synchronized
-                override fun onCrashHandleStart2GetExtraDatas(
-                    crashType: Int,
-                    errorType: String,
-                    errorMessage: String,
-                    errorStack: String
-                ): ByteArray? {
-                    return try {
-                        "Extra data.".toByteArray(charset("UTF-8"))
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        return null
-                    }
+            @Synchronized
+            override fun onCrashHandleStart2GetExtraDatas(
+                crashType: Int,
+                errorType: String,
+                errorMessage: String,
+                errorStack: String
+            ): ByteArray? {
+                return try {
+                    "Extra data.".toByteArray(charset("UTF-8"))
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    return null
                 }
-            })
-            //统一初始化 调试时第三个参数=true 在其他进程又初始化日志框架有效?
-            CrashReport.initCrashReport(context, appId, debug, strategy)
-        }
+            }
+        })
+        //统一初始化 调试时第三个参数=true 在其他进程又初始化日志框架有效?
+        CrashReport.initCrashReport(context, appId, debug, strategy)
+//        }
     }
 
+    fun notifyInstallX5(context: Context){
+        val intent = Intent()
+        intent.action = "x5_install"
+        context.sendBroadcast(intent)
+    }
 
     /**
      * 启动X5 独立Web进程的预加载服务。优点：

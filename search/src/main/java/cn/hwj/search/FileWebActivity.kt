@@ -2,13 +2,14 @@ package cn.hwj.search
 
 import android.Manifest
 import android.content.Context
+import android.net.http.SslError
 import android.os.Bundle
-import android.util.Log
 import android.view.KeyEvent
+import android.webkit.*
+import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
 import cn.hwj.core.CoreUtils
-import cn.hwj.core.global.CoreApplicationProvider
 import cn.hwj.core.global.printV
 import cn.hwj.route.RoutePath
 import com.didi.drouter.annotation.Router
@@ -37,12 +38,7 @@ class FileWebActivity : WebActivity(), ValueCallback<String> {
 
     override fun initWeb() {
         super.initWeb()
-//        mWebView.webChromeClient = object : WebChromeClient() {
-//            override fun openFileChooser(p0: ValueCallback<Uri>?, p1: String?, p2: String?) {
-//                super.openFileChooser(p0, p1, p2)
-//            }
-//        }
-        printV("x5-state=${QbSdk.isTbsCoreInited()}")
+//        useSysWeb()//好奇怪的bug，每次第一次安装打开一定失败，不只是链接问题？
         val tvInfo = findViewById<TextView>(R.id.tvInfo)
         tvInfo.setOnClickListener {
             try {
@@ -54,6 +50,10 @@ class FileWebActivity : WebActivity(), ValueCallback<String> {
             mCount++
             if (mCount == 7) mCount = 0
             tvInfo.text = "read$mCount"
+        }
+        val tvClick = findViewById<TextView>(R.id.tvClick)
+        tvClick.setOnClickListener {
+            printV("type=${QbSdk.canLoadX5(CoreUtils.getContext())}")
         }
         copyFile("testfiles", "tbsReadfile")
         PermissionX.init(this).permissions(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -83,9 +83,9 @@ class FileWebActivity : WebActivity(), ValueCallback<String> {
     private fun getLocalFile() {
         fileList.clear()
 //        val dirName = File(Environment.getExternalStorageDirectory(), "tbsReadfile").absolutePath
-        val dirName = File(ModuleSearch().getCacheDir(), "tbsReadfile")
+        val dirName = File(SearchUtils.getCacheDir(), "tbsReadfile")
         for (s in assets.list("testfiles")!!) {
-            Log.v("TAG", "file=${dirName}/$s")
+//            Log.v("TAG", "file=${dirName}/$s")
             fileList.add("$dirName/$s")
         }
     }
@@ -113,11 +113,11 @@ class FileWebActivity : WebActivity(), ValueCallback<String> {
         QbSdk.getMiniQBVersion(context)
         val ret: Int = QbSdk.openFileReader(context, pathName, params, this)
 
+        //当x5没有下载好就初始化，就无法成功调取阅读器
         printV("openFile-error=$ret")
     }
 
     override fun onReceiveValue(msg: String?) {
-
         //单进程打开文件后 回调的msg 存在以下可关闭当前进程，减少内存
         //openFileReader open in QB                  用 QQ 浏览器打开
         //filepath error TbsReaderDialogClosed
@@ -126,6 +126,47 @@ class FileWebActivity : WebActivity(), ValueCallback<String> {
         //fileReaderClosed
 
         printV("openFile-error2=$msg")
+    }
+
+    fun useSysWeb() {
+        mUrl = intent.getStringExtra("url")
+        val mWebView = WebView(this)
+        val fl = findViewById<FrameLayout>(R.id.fl)
+        mWebView.webChromeClient = WebChromeClient()
+        mWebView.webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(
+                view: WebView?,
+                request: WebResourceRequest?
+            ): Boolean {
+                return super.shouldOverrideUrlLoading(view, request)
+            }
+
+            override fun onReceivedSslError(
+                view: WebView?,
+                handler: SslErrorHandler?,
+                error: SslError?
+            ) {
+                super.onReceivedSslError(view, handler, error)
+                handler?.proceed()
+            }
+        }
+        mWebView.let {
+            val webSettings = it.settings
+            webSettings.allowFileAccess = true
+            webSettings.databaseEnabled = true
+            webSettings.useWideViewPort = true
+            webSettings.javaScriptCanOpenWindowsAutomatically = true
+            webSettings.javaScriptEnabled = true
+            webSettings.setRenderPriority(WebSettings.RenderPriority.HIGH)
+//            webSettings.blockNetworkImage=true //网络图片无法加载
+            webSettings.setAppCacheEnabled(true)
+            webSettings.setSupportMultipleWindows(true)
+            webSettings.setGeolocationEnabled(true)
+            webSettings.blockNetworkImage = false
+            webSettings.domStorageEnabled = true
+        }
+        fl.addView(mWebView)
+        mWebView.loadUrl(mUrl!!)
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {

@@ -47,9 +47,11 @@ dependencies {
 
     api DepManager.routerCore
     api DepManager.permissionCore
+    api DepManager.mmkv
 
     //崩溃上报
     api files('libs/bugly-core-4.1.9.aar')
 
-    api "com.android.support:multidex:1.0.3" // 多dex配置
+    //有冲突的，换其他版本
+//    api "com.android.support:multidex:1.0.3" // 多dex配置
 }

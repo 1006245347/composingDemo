@@ -2,11 +2,9 @@ package cn.hwj.search
 
 import android.app.Activity
 import android.os.Bundle
-import cn.hwj.core.CoreUtils
 import cn.hwj.core.global.BaseModuleInit
 import cn.hwj.core.global.CoreApplicationProvider
 import cn.hwj.core.global.printV
-import cn.hwj.push.PushHelper
 import cn.hwj.web.WebUtils
 import com.tencent.smtt.sdk.QbSdk
 import java.io.File
@@ -20,24 +18,26 @@ class ModuleSearch : BaseModuleInit() {
     override fun onCreate() {
         super.onCreate()
 
-        val isDebug=true  //测试调试
-        val crashId="4c673d3784"
+        val isDebug = true  //测试调试
+        val crashId = "4c673d3784"
 
         //极光推送初始化  这里会开启新的进程
 //        PushHelper.setPushDebug(isDebug)
 //        PushHelper.initPushArg(ModuleSearch().getModuleContext(), "search")
 
-        //第一种方式x5浏览器初始化 新开进程 疑问：文档中bugly要上报x5的异常信息是在新进程，要
-        //两次日志框架初始化？测试下
+        //*****Tbs出现个bug,当第一次安装应用没有赋予权限就初始化了，无法使用文件阅读器，有些某文件夹无法访问
+
+        //第一种方式x5浏览器初始化 新开进程 疑问：文档中bugly要上报x5的异常信息是在
+        // 新进程，要 //两次日志框架初始化？测试下
 //        WebUtils.startX5WebProcessPreInitService(getModuleContext(), crashId, debug = isDebug)
 
         //第二种,这里内部在主进程初始化了日志框架
-        WebUtils.let {
-            it.perStartX5()
-            it.setX5Config(true)
-            it.initX5Core(getModuleContext(), crashId, debug = isDebug, qbCall)
-        }
-        
+//        WebUtils.let {
+//            it.perStartX5()
+//            it.setX5Config(true)
+//            it.initX5Core(getModuleContext(), crashId, debug = isDebug, qbCall)
+//        }
+
         //第二种要注释以下initCrashReport，每个进程是独立的，在主进程初始化一次
 //        CoreUtils.initCrashReport(getModuleContext(), crashId, debug = isDebug)
     }
@@ -63,6 +63,8 @@ class ModuleSearch : BaseModuleInit() {
         get() = 10
 }
 
-fun ModuleSearch.getCacheDir():File?{
-    return CoreApplicationProvider.getAppCacheDir()
-}
+//这种写法每次都会创建新的对象 ModuleSearch！不合适
+//fun ModuleSearch.getCacheDir(): File? {
+//    printV("obj_module_search=$this")
+//    return CoreApplicationProvider.getAppCacheDir()
+//}

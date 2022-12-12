@@ -14,7 +14,7 @@
         android:requestLegacyExternalStorage="true"
         android:theme="@style/Theme.ComposingDemo">
 
-        <provider
+      <!--  <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="cn.hwj.composing.fileProvider"
             android:enabled="true"
@@ -23,7 +23,7 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/filepaths" />
-        </provider>
+        </provider>-->
     </application>
 
 </manifest>
