@@ -1,7 +1,6 @@
 package cn.hwj.web
 
 import android.app.ActivityManager
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Process
@@ -11,7 +10,6 @@ import com.tencent.bugly.crashreport.CrashReport.CrashHandleCallback
 import com.tencent.bugly.crashreport.CrashReport.UserStrategy
 import com.tencent.smtt.export.external.TbsCoreSettings
 import com.tencent.smtt.sdk.QbSdk
-import com.tencent.smtt.sdk.TbsDownloader
 import com.tencent.smtt.sdk.TbsListener
 import com.tencent.smtt.sdk.WebView
 
@@ -23,7 +21,7 @@ object WebUtils {
     /*判断是否成功使用x5*/
     fun isSucX5(webView: X5WebView?): Boolean? {
         webView?.let {
-            Log.v("TAG","IS--X5--${it.x5WebViewExtension!=null}")
+//            Log.v("TAG","IS--X5--${it.x5WebViewExtension!=null}")
             return it.x5WebViewExtension != null
         }
         return false
@@ -50,20 +48,21 @@ object WebUtils {
         appId: String, debug: Boolean,
         callback: QbSdk.PreInitCallback?
     ) {
-//        if (!QbSdk.isTbsCoreInited()) {
         //初始化
         QbSdk.initX5Environment(context, callback)
         QbSdk.setTbsListener(object : TbsListener {
             override fun onDownloadFinish(i: Int) { //非100都是失败
-                if (i != 100) {  //成功会主线程
-//                    TbsDownloader.startDownload(context)
-
+                if (i != 100) {
+                    QbSdk.reset(context)
                 }
                 Log.v("TAG", "x5-download-finish>>>$i ${Thread.currentThread().name}")
             }
 
             override fun onInstallFinish(i: Int) { //非200都不成功
                 Log.v("TAG", "x5-download-install>>>$i")
+                if (i == 200) {
+                    notifyInstallX5(context)
+                }
             }
 
             override fun onDownloadProgress(i: Int) {
@@ -104,13 +103,12 @@ object WebUtils {
         })
         //统一初始化 调试时第三个参数=true 在其他进程又初始化日志框架有效?
         CrashReport.initCrashReport(context, appId, debug, strategy)
-//        }
     }
 
-    fun notifyInstallX5(context: Context){
+    fun notifyInstallX5(context: Context?) {
         val intent = Intent()
         intent.action = "x5_install"
-        context.sendBroadcast(intent)
+        context?.sendBroadcast(intent)
     }
 
     /**

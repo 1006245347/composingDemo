@@ -49,6 +49,9 @@ class SearchActivity : AppCompatActivity() {
 
     private lateinit var tvInfo: TextView
     private fun initView() {
+        findViewById<TextView>(R.id.tvClick).setOnClickListener {
+            QbSdk.reset(SearchUtils.getModuleContext()) //看注释只能在同一进程有效一次
+        }
         tvInfo = findViewById(R.id.tvInfo)
         appendTxt("packageName: $packageName \n")
         appendTxt("process: ${CoreUtils.getCurProcessName(this)} \n")
@@ -84,8 +87,13 @@ class SearchActivity : AppCompatActivity() {
 //            .putExtra("url","https://www.baidu.com")
 //            .start()
 
+        //有个极端情景：进入本页面快速点击再跳转，还没来得及异步下载，这里就不触发了，需要加个延迟
+        if (TbsDownloader.isDownloading()) {
+            Toast.makeText( SearchUtils.getModuleContext(),"x5 is download !", Toast.LENGTH_SHORT).show()
+            return
+        }
         DRouter.build(RoutePath.SEARCH_ACTIVITY_FILE)
-//            .putExtra("url", "https://www.baidu.com") //百度首次安装原生必不行！！
+//            .putExtra("url", "https://www.baidu.com") //百度的链接首次安装app原生必不行！！
             .putExtra("url", "http://ark.gree.com/search/login/oauth2/authorize")
             .start()
     }
@@ -108,7 +116,7 @@ class SearchActivity : AppCompatActivity() {
         printV("id=${jv.optString("clubId")}")
     }
 
-    private fun startDownloadX5() { //要在子线程跑
+    private fun startDownloadX5() { //要在子线程跑 ???
         TbsDownloader.startDownload(CoreUtils.getContext())
     }
 

@@ -17,10 +17,7 @@ import cn.hwj.route.RoutePath
 import cn.hwj.web.WebUtils
 import cn.hwj.web.X5WebView
 import com.didi.drouter.annotation.Router
-import com.tencent.smtt.sdk.QbSdk
-import com.tencent.smtt.sdk.WebChromeClient
-import com.tencent.smtt.sdk.WebSettings
-import com.tencent.smtt.sdk.WebViewClient
+import com.tencent.smtt.sdk.*
 
 @Router(path = RoutePath.SEARCH_ACTIVITY_WEB)
 open class WebActivity : AppCompatActivity() {
@@ -66,18 +63,20 @@ open class WebActivity : AppCompatActivity() {
         mWebView.post { mWebView.loadUrl(mUrl!!) }
         //发现第一次没有去下载x5后，后面一直失败
         if (!WebUtils.isSucX5(mWebView)!!) {
-            QbSdk.reset(this.applicationContext)
-//            isSuc()//手动去下载x5   没有效果，感觉是异步的问题
-            //发现重置后就会不一定会自动下载x5,但是回退页面进入依然没有使用x5,还要再初始化(貌似每次初始化就会调用停止下载)
-            val r=object : BroadcastReceiver(){
-                override fun onReceive(p0: Context?, p1: Intent?) {
-                    printV("receive>>>")
-                    WebUtils.initX5Core(p0,"4c673d3784",true,null)
-                }
-            }
-            val filter = IntentFilter()
-            filter.addAction("x5_install")
-            registerReceiver(r,filter)
+            printV("x5--still not work!")
+            TbsDownloader.needDownload(SearchUtils.getModuleContext(),true)  //会继续下载
+
+            //这里的在现有流程不会执行，是个方案可了解
+            //发现重置后就会不一定会自动下载x5,回退页面进入依然没有使用x5,还要再初始化(貌似每次初始化就会调用停止下载)
+//            val r=object : BroadcastReceiver(){
+//                override fun onReceive(p0: Context?, p1: Intent?) {
+//                    printV("receive>>>")
+//                    WebUtils.initX5Core(p0,"4c673d3784",true,null)
+//                }
+//            }
+//            val filter = IntentFilter()
+//            filter.addAction("x5_install")
+//            registerReceiver(r,filter)
         }
     }
 
@@ -99,7 +98,7 @@ open class WebActivity : AppCompatActivity() {
         }
     }
 
-    private fun isSuc(){
+    private fun isSuc(){ //这样重新初始化要保证 x5是100%下载完成
         val w=X5WebView(this)
         if (!WebUtils.isSucX5(w)!!) {
             WebUtils.initX5Core(this.applicationContext, "4c673d3784", true, null)
