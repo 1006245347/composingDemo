@@ -3,6 +3,7 @@ package cn.hwj.login
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
+import cn.hwj.bridge.ModuleFactory
 import cn.hwj.core.global.BaseModuleInit
 import cn.hwj.core.global.CoreApplicationProvider
 import cn.hwj.core.global.printV
@@ -14,7 +15,8 @@ import cn.hwj.core.global.printV
 class ModuleLogin : BaseModuleInit() {
 
     override fun onCreate() {
-        super.onCreate()
+        //对外模块通信的api
+        ModuleFactory.instance.setLoginService(LoginServiceApi())
     }
 
     //监听回调所有的Activity

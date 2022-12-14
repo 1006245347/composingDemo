@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import cn.hwj.bridge.ModuleFactory
 import cn.hwj.core.CoreUtils
 import cn.hwj.core.global.printV
 import cn.hwj.push.PushHelper
@@ -66,6 +67,15 @@ class SearchActivity : AppCompatActivity() {
                 printV("handle1>>$msg")
             }
         }
+
+        //测试对外模块通信能力
+        if (ModuleFactory.instance.getLoginService().isLogin()) {
+            Toast.makeText(this, "已登录", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, "请登录", Toast.LENGTH_SHORT).show()
+        }
+        //在其他module调用，这里简单测试
+        printV("searchModule=${ModuleFactory.instance.getSearchService()?.getResult()}")
     }
 
     private fun initTbs() {
@@ -89,7 +99,8 @@ class SearchActivity : AppCompatActivity() {
 
         //有个极端情景：进入本页面快速点击再跳转，还没来得及异步下载，这里就不触发了，需要加个延迟
         if (TbsDownloader.isDownloading()) {
-            Toast.makeText( SearchUtils.getModuleContext(),"x5 is download !", Toast.LENGTH_SHORT).show()
+            Toast.makeText(SearchUtils.getModuleContext(), "x5 is download !", Toast.LENGTH_SHORT)
+                .show()
             return
         }
         DRouter.build(RoutePath.SEARCH_ACTIVITY_FILE)

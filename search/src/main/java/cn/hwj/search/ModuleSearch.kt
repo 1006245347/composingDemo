@@ -2,12 +2,10 @@ package cn.hwj.search
 
 import android.app.Activity
 import android.os.Bundle
+import cn.hwj.bridge.ModuleFactory
 import cn.hwj.core.global.BaseModuleInit
-import cn.hwj.core.global.CoreApplicationProvider
 import cn.hwj.core.global.printV
-import cn.hwj.web.WebUtils
 import com.tencent.smtt.sdk.QbSdk
-import java.io.File
 
 /**
  * @author by jason-何伟杰，2022/11/30
@@ -16,7 +14,8 @@ import java.io.File
 class ModuleSearch : BaseModuleInit() {
 
     override fun onCreate() {
-        super.onCreate()
+        //提供对外模块通信数据能力  不创建SearchServiceApi()就不被对外通信
+//        ModuleFactory.instance.setSearchService(SearchServiceApi())
 
         val isDebug = true  //测试调试
         val crashId = "4c673d3784"

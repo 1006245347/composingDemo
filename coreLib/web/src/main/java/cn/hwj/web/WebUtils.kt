@@ -12,7 +12,11 @@ import com.tencent.smtt.export.external.TbsCoreSettings
 import com.tencent.smtt.sdk.QbSdk
 import com.tencent.smtt.sdk.TbsListener
 import com.tencent.smtt.sdk.WebView
-
+/**
+ * @author by jason-何伟杰，2022/12/13
+ * des: 后期试试  https://blog.csdn.net/u014620028/article/details/109215501
+ * https://github.com/yangchong211/YCWebView/blob/master/read/Question1.md
+ */
 object WebUtils {
     fun testWeb() {
         println("testWeb()>>>")

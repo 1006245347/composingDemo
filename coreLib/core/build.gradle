@@ -40,6 +40,9 @@ import cn.hwj.buildplugin.* //import cn.hwj.buildplugin.*  注意插件会报无
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
+    //桥接各个模块间的数据通信
+    api project(':bridge')
+
     api DepManager.core
     api DepManager.appcompat
     api DepManager.material
@@ -52,6 +55,8 @@ dependencies {
     //崩溃上报
     api files('libs/bugly-core-4.1.9.aar')
 
-    //有冲突的，换其他版本
+
+
+    //有冲突的，换其他版本  androidx.multidex:multidex:2.0.1
 //    api "com.android.support:multidex:1.0.3" // 多dex配置
 }

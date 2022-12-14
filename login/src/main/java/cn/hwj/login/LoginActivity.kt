@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import cn.hwj.bridge.ModuleFactory
 import cn.hwj.core.CoreUtils
+import cn.hwj.core.global.printV
 import cn.hwj.route.RoutePath
 import com.didi.drouter.annotation.Router
 import com.didi.drouter.api.DRouter
@@ -39,7 +41,9 @@ class LoginActivity : AppCompatActivity() {
         tvPhone.setOnClickListener {
             askPermission()
         }
-        tvInfo.setOnClickListener { askNotification() }
+        tvInfo.setOnClickListener {
+            askNotification()
+        }
     }
 
     private fun appendTxt(news: String): String {
