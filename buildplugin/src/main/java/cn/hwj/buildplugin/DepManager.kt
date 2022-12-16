@@ -37,11 +37,13 @@ object DepManager {
 
     val permissionCore= "com.guolindev.permissionx:permissionx:1.7.1"  //已适配Android13
 
+    val buglySdk="com.tencent.bugly:crashreport:4.1.9"
 }
 
 object TestManager {
     const val junit = "junit:junit:4.13.2"
     const val junitX = "androidx.test.ext:junit:1.1.4"
     const val espresso = "androidx.test.espresso:espresso-core:3.5.0"
+
 }
 

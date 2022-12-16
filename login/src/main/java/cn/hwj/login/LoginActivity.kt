@@ -6,7 +6,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import cn.hwj.core.CoreUtils
-import cn.hwj.core.global.MmkvUtils
+import cn.hwj.core.global.MMKVUtils
 import cn.hwj.core.global.printV
 import cn.hwj.route.RoutePath
 import com.didi.drouter.annotation.Router
@@ -43,13 +43,13 @@ class LoginActivity : AppCompatActivity() {
         }
         tvInfo.setOnClickListener {
             askNotification()
-            MmkvUtils.addBool("c",true)
-            printV("${MmkvUtils.getBool("c")}" +
-                    "${MmkvUtils.getStr("S","gg")}"+
-            "${MmkvUtils.hasKey("h")}"
+            MMKVUtils.addBool("c",true)
+            printV("${MMKVUtils.getBool("c")} " +
+                    "${MMKVUtils.getStr("S","gg")} "+
+            "${MMKVUtils.hasKey("h")}"
             )
         }
-        MmkvUtils.addStr("S", "ss")
+//        MMKVUtils.addStr("S", "ss")
     }
 
     private fun appendTxt(news: String): String {
@@ -57,7 +57,7 @@ class LoginActivity : AppCompatActivity() {
         val stringBuilder = StringBuilder()
             .append(txt)
             .append(news)
-        tvInfo.setText(stringBuilder.toString())
+        tvInfo.text = stringBuilder.toString()
         return stringBuilder.toString()
     }
 

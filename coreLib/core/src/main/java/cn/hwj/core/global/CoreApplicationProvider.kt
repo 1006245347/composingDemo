@@ -38,7 +38,7 @@ open class CoreApplicationProvider : Application() {
         printV("Application执行次数》》 $this")
     }
 
-    //模块的初始化保证在主进程中
+    /*模块的初始化保证在主进程中*/
     private fun isAppMainProcess(context: Context): Boolean {
         if (TextUtils.equals(getCurProcessName(context), packageName)) {
             return true
@@ -49,9 +49,7 @@ open class CoreApplicationProvider : Application() {
     /*适合基础库的初始化，会回调到所有模块*/
     open fun initApp() {
         //现在做到自动初始化
-//        MMkvUtils.setSavePath(getImageCacheDir()?.absolutePath)
-
-//        MMKVUtil.Builder().setSavePath(getAppCacheDir()?.absolutePath).build()
+        MMKVUtils.setSavePath(getImageCacheDir()?.absolutePath)
         DRouter.init(this) //初始化路由表
     }
 

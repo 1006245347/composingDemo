@@ -7,14 +7,28 @@ import com.tencent.mmkv.MMKV
  * @author by jason-何伟杰，2022/12/15
  * des:
  */
-class MmkvUtils {
+class MMKVUtils {
+
+    private fun initKv(path: String? = null, mode: Int = MMKV.SINGLE_PROCESS_MODE) {
+        kv = if (path.isNullOrEmpty()) {
+            MMKV.initialize(CoreUtils.getContext())
+            MMKV.defaultMMKV()
+        } else {//自定义根目录
+            MMKV.initialize(CoreUtils.getContext(), path)  //设置储存路径
+            MMKV.mmkvWithID("config_cache", mode) //设置存储文件名
+        }
+    }
+
     companion object {
         private var kv: MMKV? = null
-        val INSTANCE: MmkvUtils by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
-            MmkvUtils()
+
+        /*单例*/
+        val INSTANCE: MMKVUtils by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+            MMKVUtils()
         }
 
-        fun setSavePath(path: String?, mode: Int = MMKV.SINGLE_PROCESS_MODE): MmkvUtils {
+        /*设置存储目录，这样会重设个kv对象，每个kv是对应设置的路径，如果是业务区别目录存储那么要多次调佣该方法切换*/
+        fun setSavePath(path: String?, mode: Int = MMKV.SINGLE_PROCESS_MODE): MMKVUtils {
             INSTANCE.initKv(path, mode)
             return INSTANCE
         }
@@ -88,13 +102,5 @@ class MmkvUtils {
         }
     }
 
-    private fun initKv(path: String? = null, mode: Int = MMKV.SINGLE_PROCESS_MODE) {
-        kv = if (path.isNullOrEmpty()) {
-            MMKV.initialize(CoreUtils.getContext())
-            MMKV.defaultMMKV()
-        } else {//自定义根目录
-            MMKV.initialize(CoreUtils.getContext(), path)
-            MMKV.mmkvWithID("myId", mode)
-        }
-    }
+
 }

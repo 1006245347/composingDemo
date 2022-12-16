@@ -53,7 +53,7 @@ dependencies {
     api DepManager.mmkv
 
     //崩溃上报
-    api files('libs/bugly-core-4.1.9.aar')
+    api DepManager.buglySdk
 
 
 
