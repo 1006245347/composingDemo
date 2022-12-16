@@ -7,7 +7,6 @@ buildscript {
     }
     dependencies {
         // 因为使用的 Kotlin 需要需要添加 Kotlin 插件 https://plugins.gradle.org/plugin/org.jetbrains.kotlin.kapt/1.6.10
-//        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"  //gradle7.1.2 最高兼容kotlin1.6.21
     }
 
@@ -26,7 +25,6 @@ repositories {
 
 dependencies {
     implementation gradleApi()
-//    implementation "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10"
     implementation "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
 }
 

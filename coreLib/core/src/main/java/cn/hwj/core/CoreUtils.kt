@@ -18,7 +18,6 @@ object CoreUtils {
         CrashReport.testJavaCrash()
     }
 
-
     fun initCrashReport(context: Context, appId: String, debug: Boolean) {
         CrashReport.initCrashReport(context, appId, debug)
     }

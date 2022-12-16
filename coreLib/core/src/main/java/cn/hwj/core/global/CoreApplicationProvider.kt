@@ -48,7 +48,10 @@ open class CoreApplicationProvider : Application() {
 
     /*适合基础库的初始化，会回调到所有模块*/
     open fun initApp() {
-        MMKVUtil.Builder().setSavePath(getAppCacheDir()?.absolutePath).build()
+        //现在做到自动初始化
+//        MMkvUtils.setSavePath(getImageCacheDir()?.absolutePath)
+
+//        MMKVUtil.Builder().setSavePath(getAppCacheDir()?.absolutePath).build()
         DRouter.init(this) //初始化路由表
     }
 
