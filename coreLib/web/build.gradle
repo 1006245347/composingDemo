@@ -42,6 +42,7 @@ dependencies {
 
     //集成x5 webView内核
     api files('libs/tbs_sdk_thirdapp_v4.3.0.326_44226_sharewithdownloadwithfile_withoutGame_obfs_20220825_155943.jar')
-    //崩溃上报
-    api files('libs/bugly-core-4.1.9.aar')
+//    //崩溃上报
+//    im files('libs/bugly-core-4.1.9.aar')
+    api DepManager.buglySdk
 }

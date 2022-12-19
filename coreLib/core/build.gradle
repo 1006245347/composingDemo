@@ -59,4 +59,5 @@ dependencies {
 
     //有冲突的，换其他版本  androidx.multidex:multidex:2.0.1
 //    api "com.android.support:multidex:1.0.3" // 多dex配置
+//    api "androidx.multidex:multidex:2.0.1"
 }
