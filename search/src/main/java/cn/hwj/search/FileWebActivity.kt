@@ -159,7 +159,7 @@ class FileWebActivity : WebActivity(), ValueCallback<String> {
             webSettings.javaScriptEnabled = true
             webSettings.setRenderPriority(WebSettings.RenderPriority.HIGH)
 //            webSettings.blockNetworkImage=true //网络图片无法加载
-            webSettings.setAppCacheEnabled(true)
+//            webSettings.setAppCacheEnabled(true)
             webSettings.setSupportMultipleWindows(true)
             webSettings.setGeolocationEnabled(true)
             webSettings.blockNetworkImage = false

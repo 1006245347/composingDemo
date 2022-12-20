@@ -88,25 +88,23 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun clickEvent() {
-//        printV("curProcess=${CoreUtils.getCurProcessName(this)}")
-//        CoreUtils.testCrashUpload()
-//        DRouter.build(RoutePath.SEARCH_ACTIVITY_LIST)
-//            .start()
+        DRouter.build(RoutePath.SEARCH_ACTIVITY_LIST)
+            .start()
 
 //        DRouter.build(RoutePath.SEARCH_ACTIVITY_WEB)
 //            .putExtra("url","https://www.baidu.com")
 //            .start()
 
-        //有个极端情景：进入本页面快速点击再跳转，还没来得及异步下载，这里就不触发了，需要加个延迟
-        if (TbsDownloader.isDownloading()) {
-            Toast.makeText(SearchUtils.getModuleContext(), "x5 is download !", Toast.LENGTH_SHORT)
-                .show()
-            return
-        }
-        DRouter.build(RoutePath.SEARCH_ACTIVITY_FILE)
-//            .putExtra("url", "https://www.baidu.com") //百度的链接首次安装app原生必不行！！
-            .putExtra("url", "http://ark.gree.com/search/login/oauth2/authorize")
-            .start()
+//        //有个极端情景：进入本页面快速点击再跳转，还没来得及异步下载，这里就不触发了，需要加个延迟
+//        if (TbsDownloader.isDownloading()) {
+//            Toast.makeText(SearchUtils.getModuleContext(), "x5 is download !", Toast.LENGTH_SHORT)
+//                .show()
+//            return
+//        }
+//        DRouter.build(RoutePath.SEARCH_ACTIVITY_FILE)
+////         //   .putExtra("url", "https://www.baidu.com") //百度的链接首次安装app原生必不行！！
+//            .putExtra("url", "http://ark.gree.com/search/login/oauth2/authorize")
+//            .start()
     }
 
     private fun appendTxt(news: String): String {

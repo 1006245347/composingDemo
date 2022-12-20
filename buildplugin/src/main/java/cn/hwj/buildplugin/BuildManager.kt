@@ -5,8 +5,8 @@ package cn.hwj.buildplugin
  */
 object BuildManager {
     const val applicationId = "cn.hwj.composing"
-    const val compileSdkVersion = 32
-    const val targetSdkVersion = 32
+    const val compileSdkVersion = 33
+    const val targetSdkVersion = 33
     const val minSdkVersion = 21
     const val versionCode = 1
     const val versionName = "1.0.0"

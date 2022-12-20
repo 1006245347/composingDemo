@@ -55,6 +55,10 @@ dependencies {
     //崩溃上报
     api DepManager.buglySdk
 
+    api DepManager.rvHelper
+    api "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+    implementation 'androidx.recyclerview:recyclerview:1.3.0-beta02'
+
 
 
     //有冲突的，换其他版本  androidx.multidex:multidex:2.0.1

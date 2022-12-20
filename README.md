@@ -42,4 +42,5 @@ Kotlin版本 kotlin = "1.6.10"
 }
 ## 文章分享[] (https://blog.csdn.net/j7a2son/article/details/128118644?spm=1001.2014.3001.5502)
 ## gradle-wrapper.properties文件
-distributionUrl=https\://services.gradle.org/distributions/gradle-7.2-bin.zip
+初始版   distributionUrl=https\://services.gradle.org/distributions/gradle-7.2-bin.zip
+已更新至 distributionUrl=https\://services.gradle.org/distributions/gradle-7.4-bin.zip

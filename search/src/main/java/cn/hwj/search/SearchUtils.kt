@@ -19,4 +19,8 @@ object SearchUtils {
     fun getModuleApplication():Application{
         return CoreApplicationProvider.appContext
     }
+
+    fun test(){
+
+    }
 }
