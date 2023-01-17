@@ -1,6 +1,7 @@
 package cn.hwj.login
 
 import android.Manifest
+import android.os.Build
 import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toast
@@ -77,13 +78,14 @@ class LoginActivity : AppCompatActivity() {
 
     private fun askPermission() {
         val requestList = ArrayList<String>()
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-//            requestList.add(Manifest.permission.READ_MEDIA_IMAGES)
-//            requestList.add(Manifest.permission.READ_MEDIA_AUDIO)
-//            requestList.add(Manifest.permission.READ_MEDIA_VIDEO)
-//        } //Android 13 特有权限，由于编译器在sdk33无法自动补全xml代码，后续再升级As
-        requestList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        requestList.add(Manifest.permission.READ_EXTERNAL_STORAGE)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestList.add(Manifest.permission.READ_MEDIA_IMAGES)
+            requestList.add(Manifest.permission.READ_MEDIA_AUDIO)
+            requestList.add(Manifest.permission.READ_MEDIA_VIDEO)
+        } else { //Android 13 特有权限，由于编译器在sdk33无法自动补全xml代码，后续再升级As
+            requestList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            requestList.add(Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
         PermissionX.init(this)
             .permissions(requestList)
             .onExplainRequestReason { scope, deniedList ->
