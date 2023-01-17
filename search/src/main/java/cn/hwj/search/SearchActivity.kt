@@ -1,9 +1,15 @@
 package cn.hwj.search
 
 import android.Manifest
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.provider.Settings
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import cn.hwj.bridge.ModuleFactory
 import cn.hwj.core.CoreUtils
@@ -36,20 +42,52 @@ class SearchActivity : AppCompatActivity() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        PermissionX.init(this)
-            .permissions(
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            )
-            .request { allGranted, grantedList, deniedList ->
-                if (allGranted) {
-                    initTbs()
-                    testMultiCache()
-                } else {
-                    Toast.makeText(this, "Deny permission!", Toast.LENGTH_SHORT).show()
+        askPermission()
+    }
+
+    private fun askPermission() {
+        val requestList = ArrayList<String>()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestList.add(Manifest.permission.READ_MEDIA_IMAGES)
+            requestList.add(Manifest.permission.READ_MEDIA_AUDIO)
+            requestList.add(Manifest.permission.READ_MEDIA_VIDEO)
+        } else { //Android 13 特有权限，由于编译器在sdk33无法自动补全xml代码，后续再升级As
+            requestList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            requestList.add(Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (Environment.isExternalStorageManager()) {
+                initTbs()
+                testMultiCache()
+            }else {
+                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+                intent.data = Uri.parse("package:$packageName")
+                val startActivity = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+                    if (Environment.isExternalStorageManager()) {
+                        initTbs()
+                        testMultiCache()
+                    } else {
+                        Toast.makeText(this, "存储权限获取失败", Toast.LENGTH_SHORT).show()
+                    }
                 }
+                startActivity.launch(intent)
             }
+        }else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            PermissionX.init(this)
+                .permissions(requestList)
+                .onExplainRequestReason { scope, deniedList ->
+                    val msg = "同意以下权限使用："
+                    scope.showRequestReasonDialog(deniedList, msg, "Allow", "Deny")
+                }.request { allGranted, grantedList, deniedList ->
+                    if (allGranted) {
+                        Toast.makeText(this, "all granted!", Toast.LENGTH_SHORT).show()
+                        initTbs()
+                        testMultiCache()
+                    } else {
+                        Toast.makeText(this, "Deny $deniedList!", Toast.LENGTH_SHORT).show()
+                    }
+                }
+        }
     }
 
     private fun testMultiCache(){
