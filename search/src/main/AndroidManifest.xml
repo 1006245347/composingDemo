@@ -32,6 +32,11 @@
         <activity
             android:name=".FileWebActivity"
             android:exported="false" />
+        <activity
+            android:name=".menu.MenuActivity"
+            android:exported="false">
+
+        </activity>
     </application>
 
 </manifest>

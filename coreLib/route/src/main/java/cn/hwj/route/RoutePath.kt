@@ -18,5 +18,6 @@ object RoutePath {
     const val SEARCH_ACTIVITY_LIST = "/search/list"
     const val SEARCH_ACTIVITY_WEB="/search/web"
     const val SEARCH_ACTIVITY_FILE="/search/file"
+    const val SEARCH_ACTIVITY_MENU="/search/menu"
 
 }

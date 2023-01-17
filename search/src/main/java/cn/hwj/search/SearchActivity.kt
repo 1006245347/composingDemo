@@ -101,7 +101,12 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun clickEvent() {
-        DRouter.build(RoutePath.SEARCH_ACTIVITY_LIST)
+//        DRouter.build(RoutePath.SEARCH_ACTIVITY_LIST)
+//            .start()
+
+        DRouter.build(RoutePath.SEARCH_ACTIVITY_MENU)
+//            .putExtra("type",1)
+            .putExtra("type",0) //普通适配器列表
             .start()
 
 //        DRouter.build(RoutePath.SEARCH_ACTIVITY_WEB)
