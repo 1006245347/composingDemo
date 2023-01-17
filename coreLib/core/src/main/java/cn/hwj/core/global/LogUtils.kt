@@ -8,7 +8,7 @@ import android.util.Log
  */
 internal var openLog = true
 
-const val TAG = "TAG"
+const val TAG = "cd"
 
 fun setLogEnable(enable: Boolean = true) {
     openLog = enable

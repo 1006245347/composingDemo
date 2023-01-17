@@ -5,17 +5,23 @@ import com.tencent.mmkv.MMKV
 
 /**
  * @author by jason-何伟杰，2022/12/15
- * des:
+ * des:没有读写权限，初始化会崩溃
+ * 拓展多进程数据访问，组件化是打包多个apk，数据缓存本地应
+ * 区分文件目录，防止相同的key-value影响
  */
 class MMKVUtils {
 
-    private fun initKv(path: String? = null, mode: Int = MMKV.SINGLE_PROCESS_MODE) {
+    private fun initKv(
+        path: String? = null,
+        moduleId: String? = "core",
+        mode: Int = MMKV.MULTI_PROCESS_MODE
+    ) {
         kv = if (path.isNullOrEmpty()) {
             MMKV.initialize(CoreUtils.getContext())
             MMKV.defaultMMKV()
-        } else {//自定义根目录
-            MMKV.initialize(CoreUtils.getContext(), path)  //设置储存路径
-            MMKV.mmkvWithID("config_cache", mode) //设置存储文件名
+        } else {
+            val rootDir = MMKV.initialize(CoreUtils.getContext(), path)   //自定义根目录，设置储存路径
+            MMKV.mmkvWithID(moduleId, mode, null, rootDir)  //设置存储文件名，以业务命名
         }
     }
 
@@ -28,8 +34,12 @@ class MMKVUtils {
         }
 
         /*设置存储目录，这样会重设个kv对象，每个kv是对应设置的路径，如果是业务区别目录存储那么要多次调佣该方法切换*/
-        fun setSavePath(path: String?, mode: Int = MMKV.SINGLE_PROCESS_MODE): MMKVUtils {
-            INSTANCE.initKv(path, mode)
+        fun setSavePath(
+            path: String?,
+            moduleId: String? = "core",
+            mode: Int = MMKV.MULTI_PROCESS_MODE
+        ): MMKVUtils {
+            INSTANCE.initKv(path, moduleId, mode)
             return INSTANCE
         }
 
@@ -101,6 +111,4 @@ class MMKVUtils {
             return getKv().decodeLong(key, def)
         }
     }
-
-
 }

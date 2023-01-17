@@ -6,8 +6,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import cn.hwj.core.CoreUtils
-import cn.hwj.core.global.MMKVUtils
-import cn.hwj.core.global.printV
+import cn.hwj.core.global.*
 import cn.hwj.route.RoutePath
 import com.didi.drouter.annotation.Router
 import com.didi.drouter.api.DRouter
@@ -39,17 +38,27 @@ class LoginActivity : AppCompatActivity() {
             tvPhone.text = it
         }
         tvPhone.setOnClickListener {
-            askPermission()
+            launchAty()
         }
         tvInfo.setOnClickListener {
             askNotification()
-            MMKVUtils.addBool("c",true)
-            printV("${MMKVUtils.getBool("c")} " +
-                    "${MMKVUtils.getStr("S","gg")} "+
-            "${MMKVUtils.hasKey("h")}"
+            MMKVUtils.addBool("c", true)
+            printV(
+                "${MMKVUtils.getBool("c")} " +
+                        "${MMKVUtils.getStr("S", "gg")} " +
+                        "${MMKVUtils.hasKey("h")}"
             )
         }
-//        MMKVUtils.addStr("S", "ss")
+        askPermission()
+
+    }
+
+    private fun mockLogin() {
+        val user = "user info"
+        MMKVUtils.setSavePath(CoreApplicationProvider.getGlobalDir(), "login")
+//        val user = UserBean("jason", "13232508893")
+        MMKVUtils.addStr("user", user)
+        printD("local=${MMKVUtils.getStr("user")}")
     }
 
     private fun appendTxt(news: String): String {
@@ -83,7 +92,7 @@ class LoginActivity : AppCompatActivity() {
             }.request { allGranted, grantedList, deniedList ->
                 if (allGranted) {
                     Toast.makeText(this, "all granted!", Toast.LENGTH_SHORT).show()
-                    launchAty()
+                    mockLogin()
                 } else {
                     Toast.makeText(this, "Deny $deniedList!", Toast.LENGTH_SHORT).show()
                 }

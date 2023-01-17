@@ -2,6 +2,7 @@ package cn.hwj.core.global
 
 import android.app.Application
 import android.content.Context
+import android.os.Environment
 import android.text.TextUtils
 import cn.hwj.core.CoreUtils.getCurProcessName
 import com.didi.drouter.api.DRouter
@@ -24,6 +25,11 @@ open class CoreApplicationProvider : Application() {
         @JvmStatic
         fun getImageCacheDir(): File? {
             return appContext.getExternalFilesDir(appContext.packageName + "_img")
+        }
+
+        @JvmStatic
+        fun getGlobalDir(): String? {
+            return Environment.getExternalStorageDirectory().absolutePath + File.separator + "cd" + File.separator
         }
     }
 
@@ -48,8 +54,6 @@ open class CoreApplicationProvider : Application() {
 
     /*适合基础库的初始化，会回调到所有模块*/
     open fun initApp() {
-        //现在做到自动初始化
-        MMKVUtils.setSavePath(getImageCacheDir()?.absolutePath)
         DRouter.init(this) //初始化路由表
     }
 

@@ -7,6 +7,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import cn.hwj.bridge.ModuleFactory
 import cn.hwj.core.CoreUtils
+import cn.hwj.core.global.CoreApplicationProvider
+import cn.hwj.core.global.MMKVUtils
+import cn.hwj.core.global.printD
 import cn.hwj.core.global.printV
 import cn.hwj.push.PushHelper
 import cn.hwj.push.PushListener
@@ -42,10 +45,20 @@ class SearchActivity : AppCompatActivity() {
             .request { allGranted, grantedList, deniedList ->
                 if (allGranted) {
                     initTbs()
+                    testMultiCache()
                 } else {
                     Toast.makeText(this, "Deny permission!", Toast.LENGTH_SHORT).show()
                 }
             }
+    }
+
+    private fun testMultiCache(){
+        //测试组件化多进程数据获取
+        MMKVUtils.setSavePath(CoreApplicationProvider.getGlobalDir(), "login")
+        printD("user=${MMKVUtils.getStr("user")} ")
+        MMKVUtils.setSavePath(CoreApplicationProvider.getGlobalDir(), "search")
+        MMKVUtils.addStr("u", "uu")
+        printD("search>${MMKVUtils.getStr("u")} ${MMKVUtils.getStr("user")}")
     }
 
     private lateinit var tvInfo: TextView
@@ -69,7 +82,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         //测试对外模块通信能力
-        if (ModuleFactory.instance.getLoginService().isLogin()) {
+        if (ModuleFactory.instance.getLoginService()?.isLogin() == true) {
             Toast.makeText(this, "已登录", Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(this, "请登录", Toast.LENGTH_SHORT).show()

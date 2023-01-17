@@ -6,7 +6,7 @@ object DepManager {
 
     //true=各模块单独运行，false=app集成所有模块
     //手动调整集成模式，需要修改isDebug的值，还要Invalidate Caches全√才能变换
-    val isDebug=false
+    val isDebug=true
     /**
      * 依赖版本
      */
@@ -47,7 +47,7 @@ object DepManager {
     const val annotation = "androidx.annotation:annotation:1.5.0" //androidx注解迁移
 
     //界面view  列表适配器 https://github.com/CymChad/BaseRecyclerViewAdapterHelper
-    const val rvHelper = "io.github.cymchad:BaseRecyclerViewAdapterHelper:4.0.0-beta02"
+    const val rvHelper = "io.github.cymchad:BaseRecyclerViewAdapterHelper:4.0.0-beta04"
     const val recyclerView="androidx.recyclerview:recyclerview:1.3.0-rc01"
     const val swipeRefresh= "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 }
