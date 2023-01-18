@@ -1,3 +1,4 @@
+//kapt { arguments { arg('eventBusIndex', 'cn.hwj.core.MyEventBusIndex') } } //这个是设置生成文件的路径
 android {
     compileSdk BuildManager.compileSdkVersion
 
@@ -58,6 +59,12 @@ dependencies {
     api DepManager.rvHelper
     api DepManager.swipeRefresh
     api DepManager.recyclerView
+
+    //https://greenrobot.org/eventbus/documentation/subscriber-index/
+    //因为把插件文件夹放项目外面了，无法构建成功，无法用Index加速,只能普通用法了
+    api DepManager.eventbusCore
+    kapt DepManager.eventbusNote
+
 
 
     //有冲突的，换其他版本  androidx.multidex:multidex:2.0.1

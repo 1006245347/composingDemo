@@ -6,6 +6,7 @@ import android.os.Environment
 import android.text.TextUtils
 import cn.hwj.core.CoreUtils.getCurProcessName
 import com.didi.drouter.api.DRouter
+import org.greenrobot.eventbus.EventBus
 import java.io.File
 
 /**
