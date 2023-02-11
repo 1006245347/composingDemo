@@ -41,12 +41,46 @@
         <activity
             android:name=".SearchActivity"
             android:exported="true">
+            <!--  <intent-filter>
+                  <action android:name="android.intent.action.MAIN" />
+
+                  <category android:name="android.intent.category.LAUNCHER" />
+              </intent-filter>-->
+        </activity>
+
+<!--  Intent.flag 的测试      -->
+        <receiver
+            android:name=".launch.StateBroadReceived"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="first" />
+                <action android:name="second" />
+                <action android:name="third" />
+                <action android:name="login" />
+                <action android:name="news" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".launch.FirstActivity"
+            android:exported="true" />
+        <activity android:name=".launch.SecondActivity" />
+        <activity android:name=".launch.ThirdActivity" />
+        <activity
+            android:name=".launch.LoginActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                <action android:name="com.hwj.shortcut" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
         </activity>
+        <activity
+            android:name=".launch.NewsActivity"
+            android:exported="true" />
     </application>
 
 </manifest>

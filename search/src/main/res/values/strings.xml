@@ -2,5 +2,6 @@
     <string name="app_name">search</string>
     <string name="app_name_pad">{"_default":"{"mac":"703E97047266","deviceName":"舒睿-智睿展区屏幕（WIFI）","clubId":"1047554870342582272","clubName":"格力上海舒享家"}"}</string>
 
-
+<string name="tipsearch">news</string>
+    <string name="tipfirst">first</string>
 </resources>
