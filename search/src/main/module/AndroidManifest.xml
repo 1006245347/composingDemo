@@ -25,9 +25,7 @@
 
         <activity
             android:name=".menu.MenuActivity"
-            android:exported="false">
-
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".FileWebActivity"
             android:exported="false"
@@ -41,14 +39,12 @@
         <activity
             android:name=".SearchActivity"
             android:exported="true">
-            <!--  <intent-filter>
-                  <action android:name="android.intent.action.MAIN" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-                  <category android:name="android.intent.category.LAUNCHER" />
-              </intent-filter>-->
-        </activity>
-
-<!--  Intent.flag 的测试      -->
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity> <!-- Intent.flag 的测试 -->
         <receiver
             android:name=".launch.StateBroadReceived"
             android:exported="true">
@@ -69,11 +65,14 @@
         <activity
             android:name=".launch.LoginActivity"
             android:exported="true">
+
+            <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="com.hwj.shortcut" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            -->
             <meta-data
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
@@ -81,6 +80,15 @@
         <activity
             android:name=".launch.NewsActivity"
             android:exported="true" />
+
+<!--   多进程通信     -->
+
+        <activity
+            android:name=".process.BundleActivity"
+            android:process=":bundle"
+            android:exported="true">
+
+        </activity>
     </application>
 
 </manifest>

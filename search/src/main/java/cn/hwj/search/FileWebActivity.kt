@@ -126,6 +126,9 @@ class FileWebActivity : WebActivity(), ValueCallback<String> {
         //fileReaderClosed
 
         printV("openFile-error2=$msg")
+        if ("fileReaderClosed" == msg) {
+            finish()
+        }
     }
 
     fun useSysWeb() {

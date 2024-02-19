@@ -59,20 +59,21 @@ class SearchActivity : AppCompatActivity() {
             if (Environment.isExternalStorageManager()) {
                 initTbs()
                 testMultiCache()
-            }else {
+            } else {
                 val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
                 intent.data = Uri.parse("package:$packageName")
-                val startActivity = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-                    if (Environment.isExternalStorageManager()) {
-                        initTbs()
-                        testMultiCache()
-                    } else {
-                        Toast.makeText(this, "存储权限获取失败", Toast.LENGTH_SHORT).show()
+                val startActivity =
+                    registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                        if (Environment.isExternalStorageManager()) {
+                            initTbs()
+                            testMultiCache()
+                        } else {
+                            Toast.makeText(this, "存储权限获取失败", Toast.LENGTH_SHORT).show()
+                        }
                     }
-                }
                 startActivity.launch(intent)
             }
-        }else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             PermissionX.init(this)
                 .permissions(requestList)
                 .onExplainRequestReason { scope, deniedList ->
@@ -90,7 +91,7 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun testMultiCache(){
+    private fun testMultiCache() {
         //测试组件化多进程数据获取
         MMKVUtils.setSavePath(CoreApplicationProvider.getGlobalDir(), "login")
         printD("user=${MMKVUtils.getStr("user")} ")
@@ -103,6 +104,11 @@ class SearchActivity : AppCompatActivity() {
     private fun initView() {
         findViewById<TextView>(R.id.tvClick).setOnClickListener {
             QbSdk.reset(SearchUtils.getModuleContext()) //看注释只能在同一进程有效一次
+        }
+        findViewById<TextView>(R.id.tvProcess).setOnClickListener {
+            DRouter.build(RoutePath.SEARCH_ACTIVITY_BUNDLE)
+                .putExtra("phone","114")
+                .start()
         }
         tvInfo = findViewById(R.id.tvInfo)
         appendTxt("packageName: $packageName \n")
@@ -142,10 +148,10 @@ class SearchActivity : AppCompatActivity() {
 //        DRouter.build(RoutePath.SEARCH_ACTIVITY_LIST)
 //            .start()
 
-        DRouter.build(RoutePath.SEARCH_ACTIVITY_MENU)
+//        DRouter.build(RoutePath.SEARCH_ACTIVITY_MENU)
 //            .putExtra("type",1)
-            .putExtra("type",0) //普通适配器列表
-            .start()
+//            .putExtra("type", 0) //普通适配器列表
+//            .start()
 
 //        DRouter.build(RoutePath.SEARCH_ACTIVITY_WEB)
 //            .putExtra("url","https://www.baidu.com")
@@ -157,6 +163,7 @@ class SearchActivity : AppCompatActivity() {
 //                .show()
 //            return
 //        }
+
 //        DRouter.build(RoutePath.SEARCH_ACTIVITY_FILE)
 ////         //   .putExtra("url", "https://www.baidu.com") //百度的链接首次安装app原生必不行！！
 //            .putExtra("url", "http://ark.gree.com/search/login/oauth2/authorize")

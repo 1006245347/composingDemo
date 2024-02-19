@@ -37,6 +37,8 @@
             android:name=".menu.MenuActivity"
             android:exported="false">
         </activity>
+
+
     </application>
 
 </manifest>
