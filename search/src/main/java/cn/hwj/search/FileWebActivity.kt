@@ -25,7 +25,8 @@ import java.io.File
  * des:接入本地 浏览文件，运行要替换demo的文件路径
  *
  *  该页面在 web进程运行
- */
+ *
+ *   */
 @Router(path = RoutePath.SEARCH_ACTIVITY_FILE)
 class FileWebActivity : WebActivity(), ValueCallback<String> {
 

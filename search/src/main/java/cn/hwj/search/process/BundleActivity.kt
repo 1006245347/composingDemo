@@ -15,6 +15,8 @@ import com.didi.drouter.api.DRouter
 /**
  * @author by jason-何伟杰，2024/2/19
  * des:Bundle只支持基础类型的多进程通信
+ *
+ * https://cloud.tencent.com/developer/article/1953493  WorkManager 在多进程应用中的高级用法
  */
 @Router(path = RoutePath.SEARCH_ACTIVITY_BUNDLE)
 class BundleActivity : AppCompatActivity() {
